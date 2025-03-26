@@ -13,7 +13,6 @@ Here you'll find documents, code, notes, and any resources used during the proje
 1. Clone the repository:
    ```bash
    git clone https://github.com/lucasamtaylor01/Le_TCC.git
-   cd le-tcc
    ```
 
 2. Install the necessary dependencies (if any).

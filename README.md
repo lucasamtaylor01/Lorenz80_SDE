@@ -1,28 +1,20 @@
 # Le TCC
 
-## 📝 Description
+## 📝 Descrição
+Este repositório tem o objetivo de organizar todos os arquivos e materiais relacionados ao desenvolvimento do meu Trabalho de Conclusão de Curso (TCC).
+   > 🔍 **Tópico:** *a definir*
+   Aqui serão encontrados documentos, códigos, anotações e quaisquer recursos utilizados durante o projeto.
 
-This repository is intended to organize all files and materials related to the development of my Course Conclusion Work (TCC).
+## ⚙️ Instalação
+   1. Clone o repositório:
+      ```bash
+      git clone https://github.com/lucasamtaylor01/Le_TCC.git
+      ```
+   2. Instale as dependências necessárias (se houver).
+   3. Executar o programa principal ou abrir os ficheiros relevantes, conforme necessário.
 
-> 🔍 **Topic:** *to be defined*
+## 🤝 Contribuição
+As contribuições são bem-vindas! Sinta-se à vontade para abrir um problema ou enviar uma solicitação pull através do GitHub se você tiver sugestões, melhorias ou feedback.
 
-Here you'll find documents, code, notes, and any resources used during the project.
-
-## ⚙️ Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/lucasamtaylor01/Le_TCC.git
-   ```
-
-2. Install the necessary dependencies (if any).
-
-3. Run the main program or open the relevant files as needed.
-
-## 🤝 Contribution
-
-Contributions are welcome! Feel free to open an issue or submit a pull request through GitHub if you have suggestions, improvements, or feedback.
-
-## 📄 License
-
-This project is currently licensed under the [MIT License](LICENSE), but the license may change in the future.
+## 📄 Licença
+Este projeto está atualmente licenciado sob a [MIT License](LICENSE), mas a licença pode mudar no futuro.

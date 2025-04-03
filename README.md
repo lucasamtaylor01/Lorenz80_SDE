@@ -1,4 +1,4 @@
-# Um abordagem estocástica para o atrator de Lorenz 80
+# Um abordagem estocástica Modelo L80 🔀
 
 ## 📝 Descrição
 Este repositório tem o objetivo de organizar todos os arquivos e materiais relacionados ao desenvolvimento do meu Trabalho de Conclusão de Curso (TCC).
@@ -8,7 +8,7 @@ Este repositório tem o objetivo de organizar todos os arquivos e materiais rela
 ## ⚙️ Instalação
    1. Clone o repositório:
       ```bash
-      git clone https://github.com/lucasamtaylor01/Le_TCC.git
+      git clone https://github.com/lucasamtaylor01/Lorenz80_SDE.git
       ```
    2. Instale as dependências necessárias (se houver).
    3. Executar o programa principal ou abrir os ficheiros relevantes, conforme necessário.

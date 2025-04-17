@@ -72,37 +72,132 @@ Dada a relevância deste método para o trabalho de \citet{Chekroun2021}, optamo
 
 Considere o sistema de equações diferenciais ordinárias (EDO) dado por:
 \begin{equation}
-    \frac{d}{dt} \phi(x,t) = R(\phi(x,t)), \quad \phi(x, 0) = x,
-    \label{eq:prolegomenos-sistema-edo}
+	\frac{d}{dt} \phi(x,t) = R(\phi(x,t)), \quad \phi(x, 0) = x,
+	\label{eq:sistema-edo}
 \end{equation}
 
 onde $R$ é uma função não linear, $\phi$ é uma função dependente do tempo, e $R$, $\phi$ e $x$ podem assumir dimensões infinitas, sendo formados pelos vetores $R_i$, $\phi_i$ e $x_i$, respectivamente.
 
-A partir disso, podemos definir o \textit{Operador de Liouville} associado à equação \eqref{eq:prolegomenos-sistema-edo} como:
+A partir disso, podemos definir o \textit{Operador de Liouville} associado à equação \eqref{eq:sistema-edo} como:
 \begin{equation}
-    L = \sum_i R_i(x) \frac{\partial}{\partial x_i}
-    \label{eq:prolegomenos-liouville-operator}
+	L = \sum_i R_i(x) \frac{\partial}{\partial x_i}
+	\label{eq:liouville-operator}
 \end{equation}
 
 Utilizando o \textit{Operador de Liouville}, podemos transformar o sistema de EDOs não lineares em um sistema de equações diferenciais parciais (EDPs) lineares da forma:
 \begin{equation}
-    u_t = Lu, \quad u(x,0) = g(x)
-    \label{eq:prolegomenos-sistema-edp-linear}
+	u_t = Lu, \quad u(x,0) = g(x)
+	\label{eq:sistema-edp-linear}
 \end{equation}
 
-A solução desse sistema existe, é única, e é dada por $u(x,t) = g(\phi(x,t))$. Portanto, temos que a equação \eqref{eq:prolegomenos-sistema-edp-linear} é bem definida\footnote{Detalhes da demonstração podem ser encontrados em \citet[p.~181-182]{Chorin2013}}.
+A solução desse sistema existe, é única, e é dada por:
+\begin{equation}
+	u(x,t) = g(\phi(x,t))   
+	\label{eq:solucao-sistema-edp-linear}
+\end{equation}
+Portanto, temos que a equação \eqref{eq:sistema-edp-linear} é bem definida\footnote{Detalhes da demonstração podem ser encontrados em \citet[p.~181-182]{Chorin2013}}.
 
 \subsection{Notação de semigrupo}
-\subsubsection{Introdução à notação}
-Tomemos $\Delta$ o operador de segunda derivada na variável espacial $x$: 
+\subsection{Definição de semigrupo}
+Tomemos $X$ um conjunto não vazio, dotado de uma operação binária $ * $, ou seja, $ X \times X \to X $, que satisfaz a propriedade de associatividade:
 \begin{equation*}
-    \Delta\psi = \frac{\partial^2 \psi}{\partial x^2}, \quad \text{ onde $\psi$ é uma função suave}
+	(a * b) * c = a * (b * c), \quad \forall a,b,c \in X.
 \end{equation*}
 
-Assim como a solução da equação $v' - av = 0$, $v(0) = v_0$, $a = \text{constante}$, é dada por $e^{at}v_0$, escrevemos simbolicamente a solução da equação do calor $v_t - \frac{1}{2}\Delta v = 0$, com a condição inicial $v(x, 0) = \phi(x)$, como:
+\subsubsection{Introdução à notação}
+A notação de semigrupo oferece uma forma compacta e eficiente de representar soluções para equações diferenciais, particularmente as parciais ou de evolução.
+
+Considere o operador $\Delta$ definido por:
 \begin{equation*}
-    v(t) = e^{\frac{1}{2}t\Delta}\phi \quad \text{(essa é a notação de \textit{semigrupo})}.
+	\Delta \psi = \psi_{xx}, \quad \text{onde $\psi$ é uma função suave}.
 \end{equation*}
+Agora, considere a equação diferencial:
+\begin{equation*}
+	\frac{dv}{dt} - kv = 0, \quad v(0) = v_0,
+\end{equation*}
+cuja solução é bem conhecida: $ v(t) = v_0 e^{kt} $.
+
+De forma análoga, considere a equação do calor:
+\begin{equation*}
+	v_t - \frac{1}{2} \Delta v = 0, \quad v(x, 0) = \phi(x),
+\end{equation*}
+onde $v_t$ é a derivada de $v$ em relação ao tempo e $\phi(x)$ é a condição inicial. Em vez de resolver diretamente, expressamos a solução utilizando a notação de semigrupo:
+\begin{equation*}
+	v(t) = e^{\frac{1}{2}t \Delta} \phi.
+\end{equation*}
+Aqui, $e^{\frac{1}{2}t \Delta}$ é um operador semigrupo gerado pela operação de difusão (pelo operador $\Delta$). Ele é aplicado à condição inicial $\phi(x)$, e a solução $v(t)$ descreve a evolução temporal de $v(x,t)$ ao longo do tempo $t$. Essa notação permite representar soluções de equações diferenciais de maneira compacta, explorando a estrutura associativa da operação de semigrupo. Especificamente, ela satisfaz a propriedade de composição:
+\begin{equation*}
+	e^{\frac{1}{2}(t+s)\Delta} = e^{\frac{1}{2}t \Delta} e^{\frac{1}{2}s \Delta}.
+\end{equation*}
+
+\subsection{Aplicação da notação}
+Dada a notação de semigrupo apresentada anteriormente, aplicamos esta notação à equação \eqref{eq:solucao-sistema-edp-linear}:
+\begin{equation}
+	e^{tL}g(x) = g(\phi(x,t))
+	\label{eq:solucao-sistema-edp-linear-semigrupo}
+\end{equation}
+
+Note que $e^{tL}x$ não representa uma avaliação direta de $e^{tL}$, mas sim a ação do operador $e^{tL}$ sobre o vetor formado pelos componentes $x_i$. Além disso, a função $g$ comuta com a variação temporal das condições iniciais de $x_i$. 
+
+Vale destacar que $g$ é uma função independente do tempo em relação às variáveis que descrevem o sistema físico, e sua variação ocorre exclusivamente devido à mudança dessas variáveis ao longo do tempo. Assim, a equação \eqref{eq:sistema-edp-linear} pode ser expressa como:
+\begin{equation}
+	Le^{tL} = e^{tL}L
+\end{equation}
+
+Essa mesma relação se aplica a matrizes: sejam $A$ e $B$ duas matrizes, então a seguinte identidade é válida:
+\begin{equation}
+	\exp(t(A+B)) = \exp(tA) + \int_0^t \exp\left((t-s)(A+B)\right)B\exp(sA) \, ds
+	\label{eq:formula-de-duhamel}
+\end{equation}
+
+Esta equação, conhecida como \textit{Fórmula de Duhamel} ou \textit{fórmula de Dyson}, é bem definida.
+
+\subsection{Polinômios Hermitianos}
+
+Primeiramente, definimos o produto interno como:
+\begin{equation}
+    \langle u, v \rangle = \int_{-\infty}^{+\infty} \frac{e^{-x^2/2}}{\sqrt{2 \pi}} u(x) v(x) \, dx
+    \label{eq:produto-interno-hermitiano-unidimensional}
+\end{equation}
+
+Os polinômios $p_n(x)$ e $p_m(x)$ são ortonormais em relação a esse produto interno \eqref{eq:produto-interno-hermitiano-unidimensional} quando satisfazem a seguinte condição:
+\begin{equation*}
+    \langle p_n, p_m \rangle = \int_{-\infty}^{\infty} e^{-x^2/2} p_n(x) p_m(x) \, dx = \delta_{nm},
+\end{equation*}
+em que $\delta_{nm}$ é o delta de Kronecker, que apresenta as propriedades:
+
+\begin{enumerate}
+    \item \textbf{Ortogonalidade}: Para $n \neq m$, os polinômios são ortogonais, ou seja, o produto interno entre eles é nulo:
+    \begin{equation*}
+        \langle p_n, p_m \rangle = 0 \quad \text{quando} \quad n \neq m
+    \end{equation*}
+    
+    \item \textbf{Normalização}: Para $n = m$, os polinômios são normalizados, de modo que o produto interno é igual a 1:
+    \begin{equation*}
+        \langle p_n, p_n \rangle = 1
+    \end{equation*}
+\end{enumerate}
+
+No caso $n$-dimensional, o produto interno se generaliza para:
+\begin{equation*}
+    \langle u, v \rangle = \int_{-\infty}^{+\infty} \cdots \int_{-\infty}^{+\infty} (2 \pi)^{-n/2} \exp \left(-\sum_{i=1}^n \frac{x_i^2}{2} \right) u(x) v(x) \, dx_1 \ldots dx_n
+\end{equation*}
+
+De forma mais geral, se $H(q, p)$ é um Hamiltoniano, é possível definir uma família de polinômios nas variáveis $q$ e $p$ que sejam ortonormais com respeito à densidade canônica $Z^{-1} e^{-H/T}$. Os polinômios que satisfazem essa condição ainda são chamados de \textit{polinômios de Hermite}.
+
+O Hamiltoniano $H(q, p)$ descreve a energia total de um sistema físico e, em muitos casos, é expresso como:
+\begin{equation*}
+    H(q, p) = \frac{p^2}{2m} + V(q),
+\end{equation*}
+onde $\frac{p^2}{2m}$ representa a energia cinética e $V(q)$ a energia potencial.
+
+A densidade canônica $Z^{-1} e^{-H/T}$ surge no contexto da mecânica estatística e descreve a distribuição de probabilidade dos estados do sistema em equilíbrio térmico à temperatura $T$. Nessa configuração, dizemos que dois polinômios $f(q, p)$ e $g(q, p)$ são ortonormais quando:
+\begin{equation*}
+    \langle f, g \rangle = \int f(q, p) g(q, p) \, Z^{-1} e^{-H(q, p)/T} \, dq \, dp = \delta_{fg}.
+\end{equation*}
+Esse produto interno ponderado define a ortogonalidade no espaço de fases segundo a medida induzida pela densidade canônica, e é fundamental na análise de sistemas de interesse.
+
+% Por fim, para o formalismo de Mori-Zwanzig, consideraremos um espaço $n$-dimensional $\Gamma$ com uma densidade de probabilidade dada. Dividiremos as coordenadas em dois tipos: $\hat{x}$ e $\tilde{x}$. Seja $g$ uma função de $x$; então $\mathbb{P}g = \mathbb{E}[g \mid \hat{x}]$ é uma projeção ortogonal sobre o subespaço das funções de $\hat{x}$. Pode-se realizar essa projeção gerando esse subespaço com os polinômios de Hermite que são funções de $\hat{x}$ e projetando sobre esses polinômios.
 
 
 \section{Mori-Zwanzig}

@@ -1,0 +1,135 @@
+\documentclass[12pt]{article}
+
+% Codificação e idioma
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+
+% Layout da página e espaçamento
+\usepackage[
+    a4paper,
+    left=3cm,
+    right=2cm,
+    top=3cm,
+    bottom=2cm
+]{geometry}
+\usepackage{setspace}
+\usepackage{parskip}  
+
+% Matemática
+\usepackage{amsmath, amssymb}
+
+% Gráficos e imagens
+\usepackage{graphicx}
+
+% Listas e tabelas
+\usepackage{enumitem}
+\usepackage{booktabs}
+
+% Texto falso para exemplos
+\usepackage{lipsum}
+
+% Citações e referências bibliográficas
+\usepackage{csquotes}
+\usepackage[
+    style=authoryear-comp,
+    backend=biber,
+    maxcitenames=2,
+    maxbibnames=99,
+    uniquelist=false,
+    dashed=false,
+    doi=true,
+    url=true,
+    giveninits=true,
+    uniquename=init, 
+    sorting=nyt,
+    language=portuguese
+]{biblatex}
+\addbibresource{referencias.bib}
+
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\Large\scshape MAP2419 -- Introdução ao Trabalho de Formatura \par}
+    \vspace{0.3cm}
+    {\large Instituto de Matemática e Estatística da Universidade de São Paulo (IME-USP)\par}
+    
+    \vspace{3cm}
+    
+    {\LARGE\bfseries Projeto\par}
+    \vspace{1cm}
+    {\LARGE\bfseries Título do projeto\par}
+    
+    \vfill
+    
+    \begin{minipage}[t]{0.45\textwidth}
+        \raggedright
+        \textbf{Orientador:} \par
+        Prof. Dr. Nome do orientador \par
+        \texttt{email\_do\_orientador@email.com} \par
+        \textit{IME-USP} \par\medskip
+    
+        \textbf{Coorientador:} \par
+        Prof. Dr. Nome do coorientador \par
+        \texttt{email\_do\_coorientador@email.com} \par
+        \textit{IME-USP}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.45\textwidth}
+        \raggedright
+        \textbf{Aluno:} \par
+        Seu Nome \par
+        NUSP: 12345678 \par
+        \texttt{seu\_email@usp.br} \par
+        \textit{IME-USP}
+    \end{minipage}
+    \vspace{2cm}
+\end{titlepage}
+
+\section*{Introdução}
+\lipsum[1-2]
+
+\section*{Objetivos}
+\begin{enumerate}
+    \item \lipsum[1][1-2]
+    \begin{enumerate}
+        \item \lipsum[2][1]
+        \item \lipsum[2][2]
+    \end{enumerate}
+    \item \lipsum[1][1-2]
+    \begin{enumerate}
+        \item \lipsum[2][1]
+        \item \lipsum[2][2]
+    \end{enumerate}
+    \item \lipsum[1][1-2]
+    \begin{enumerate}
+        \item \lipsum[2][1]
+        \item \lipsum[2][2]
+    \end{enumerate}
+\end{enumerate}
+
+\section*{Metodologia}
+\lipsum[1-2]
+
+\section*{Cronograma}
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{p{3cm}p{10cm}}
+    \toprule
+    \textbf{Mês} & \textbf{Atividade} \\
+    \midrule
+    Julho & \lipsum[1][1] \\
+    Agosto & \lipsum[2][1] \\
+    Setembro & \lipsum[3][1] \\
+    Outubro & \lipsum[4][1] \\
+    Novembro & \lipsum[5][1] \\
+    Dezembro & \lipsum[6][1] \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+\nocite{*}
+\printbibliography[title={Referências}, label={sec:bib}]
+
+\end{document}

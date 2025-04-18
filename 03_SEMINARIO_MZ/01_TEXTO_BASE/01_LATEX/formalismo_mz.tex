@@ -30,6 +30,7 @@
 \usepackage{enumitem}
 \usepackage{url}
 
+
 \title{Introdução ao Formalismo Mori-Zwanzig}
 \date{Abril de 2025}
 
@@ -48,7 +49,6 @@ O método de Mori-Zwanzig, desenvolvido por Robert Walter Zwanzig e Hajime Mori 
 
 Dada a relevância deste método para o trabalho de \citet{Chekroun2021}, optamos por incluir uma introdução ao formalismo de Mori-Zwanzig, a fim de proporcionar uma melhor compreensão de sua aplicação no contexto do modelo de Lorenz 80 e permitir uma base teórica sólida para eventuais explorações.
 
-\section{Motivação}
 % Consideremos o seguinte exemplo de \citet{Chorin2013} como motivação: considere um sistema de duas partículas, em um espaço unidimencional com o hamiltoniado dado por:
 % \begin{equation*}
 %     H = \frac{1}{2}\left(q_1 ^2 + q_2^2 + q_1^2q_2^2 + p_1^2 + p_2^2\right)
@@ -183,7 +183,7 @@ No caso $n$-dimensional, o produto interno se generaliza para:
     \langle u, v \rangle = \int_{-\infty}^{+\infty} \cdots \int_{-\infty}^{+\infty} (2 \pi)^{-n/2} \exp \left(-\sum_{i=1}^n \frac{x_i^2}{2} \right) u(x) v(x) \, dx_1 \ldots dx_n
 \end{equation*}
 
-De forma mais geral, se $H(q, p)$ é um Hamiltoniano, é possível definir uma família de polinômios nas variáveis $q$ e $p$ que sejam ortonormais com respeito à densidade canônica $Z^{-1} e^{-H/T}$. Os polinômios que satisfazem essa condição ainda são chamados de \textit{polinômios de Hermite}.
+De forma mais geral, se $H(q, p)$ é um Hamiltoniano, é possível definir uma família de polinômios nas variáveis $q$ e $p$ que sejam ortonormais com respeito à densidade canônica $Z^{-1} e^{-H/T}$. Os polinômios que satisfazem essa condição ainda são chamados de \textit{polinômios hermitianos}.
 
 O Hamiltoniano $H(q, p)$ descreve a energia total de um sistema físico e, em muitos casos, é expresso como:
 \begin{equation*}
@@ -197,17 +197,84 @@ A densidade canônica $Z^{-1} e^{-H/T}$ surge no contexto da mecânica estatíst
 \end{equation*}
 Esse produto interno ponderado define a ortogonalidade no espaço de fases segundo a medida induzida pela densidade canônica, e é fundamental na análise de sistemas de interesse.
 
-% Por fim, para o formalismo de Mori-Zwanzig, consideraremos um espaço $n$-dimensional $\Gamma$ com uma densidade de probabilidade dada. Dividiremos as coordenadas em dois tipos: $\hat{x}$ e $\tilde{x}$. Seja $g$ uma função de $x$; então $\mathbb{P}g = \mathbb{E}[g \mid \hat{x}]$ é uma projeção ortogonal sobre o subespaço das funções de $\hat{x}$. Pode-se realizar essa projeção gerando esse subespaço com os polinômios de Hermite que são funções de $\hat{x}$ e projetando sobre esses polinômios.
+Por fim, para o formalismo de Mori-Zwanzig, consideraremos um espaço $n$-dimensional $\Gamma$ com uma densidade de probabilidade dada. Dividiremos as coordenadas em dois tipos: $\hat{x}$ e $\tilde{x}$. Seja $g$ uma função de $x$; então $\mathbb{P}g = \mathbb{E}[g \mid \hat{x}]$ é uma projeção ortogonal sobre o subespaço das funções de $\hat{x}$.Temos que essa projeção gera um subespaço de polinômios hermitianos que são funções de $\hat{x}$ e projetando sobre esses polinômios.
 
-
+\newpage
 \section{Mori-Zwanzig}
-\subsection{Definição}
-\subsection{Exemplos e propriedades}
+\subsection{Construção}
+Tomemos novamente o sistema \eqref{eq:sistema-edo}, reproduzido abaixo:
+\begin{equation*}
+    \frac{d}{dt} \phi(x,t) = R(\phi(x,t)), \quad \phi(x, 0) = x,
+\end{equation*}
+
+Lembremos que a equação é composta por componentes de dimensão $n$. Dentre essas $n$ componentes, definimos as primeiras $m$ componentes de $\phi$, com $m < n$, como as variáveis de interesse. Em seguida, classificamos $\hat{\phi}$ como as variáveis ``resolvidas'' e $\tilde{\phi}$ como as variáveis ``não resolvidas'':
+\begin{equation*}
+    \phi = (\hat{\phi}, \tilde{\phi}), \quad \hat{\phi} = \left(\phi_1, \ldots, \phi_m \right), \quad \tilde{\phi} = \left(\phi_{m+1}, \ldots, \phi_n\right)
+\end{equation*}
+O mesmo vale para $x$ e $R$: $x = (\hat{x}, \tilde{x})$ e $R = (\hat{R}, \tilde{R})$. A partir das variáveis resolvidas, buscamos criar predições para o modelo de interesse, utilizando as soluções de uma parte da equação.
+
+Com base no \textit{Operador de Liouville} e na \textit{notação de semigrupo}, podemos reescrever as componentes de $\hat{\phi}$ como\footnote{Note que cada componente depende de \textbf{todos} os valores de $x$. Portanto, se $\tilde{x}$ for aleatório, então $\hat{\phi}$ também será.}:
+\begin{equation*}
+    \hat{\phi}_j(x,t) = e^{tL}x_j, \quad 1 \leq j \leq m
+\end{equation*}
+Ainda na notação de semigrupo, a equação dessas componentes é dada por:
+\begin{equation}
+    \frac{\partial}{\partial t}e^{tL}x_j = Le^{tL}x_j = e^{tL}Lx
+    \label{eq:mori-zwanzig-notacao-semigrupo}
+\end{equation}
+
+A partir da \textit{projeção ortogonal} introduzida na seção anterior, definimos $\mathbb{P}$ como a projeção dada por: $\mathbb{P}g(x) = \mathbb{E}[g|\hat{x}]$. Assumimos que, no instante $t = 0$, conhecemos a densidade conjunta de todas as variáveis $x$, mas apenas os dados iniciais $\hat{x}$ são conhecidos. A densidade das variáveis em $\tilde{x}$ é, então, a densidade conjunta de todas as variáveis $x$ com $\hat{x}$ fixado. Assim, $\mathbb{P}$ é uma projeção sobre um espaço de funções com variáveis fixas e, portanto, independente do tempo.
+
+As projeções $\mathbb{P}\hat{\phi}(t) = \mathbb{E}[\hat{\phi}(t) | \hat{x}]$ são de nosso maior interesse, pois estimam o comportamento do sistema a partir de um conjunto reduzido de variáveis.
+
+Definindo $\mathbb{Q} = I - \mathbb{P}$ e considerando que as seguintes propriedades são válidas para quaisquer projeções ortogonais:
+\begin{enumerate}
+    \item $\mathbb{P}^2 = \mathbb{P}$;
+    \item $\mathbb{Q}^2 = \mathbb{Q}$;
+    \item $\mathbb{P}\mathbb{Q} = 0$.
+\end{enumerate}
+
+Podemos reescrever a equação \eqref{eq:mori-zwanzig-notacao-semigrupo} como:
+\begin{equation}
+    \frac{\partial }{\partial t}e^{tL}x_j = e^{tL}\mathbb{P}Lx_j + e^{tL}\mathbb{Q}Lx_j
+    \label{eq:mori-zwanzig-pre-mz}
+\end{equation}
+
+Utilizando agora a \textit{fórmula de Dyson}, com $A = \mathbb{Q}L$ e $B = \mathbb{Q}L$, obtemos:
+\begin{equation}
+    e^{tL} = e^{t\mathbb{Q}L} + \int_0^t e^{(t-s)L} \mathbb{P}L e^{s\mathbb{Q}L} \, ds
+    \label{eq:mori-zwanzig-dyson-mz}
+\end{equation}
+
+Pela linearidade da equação de Liouville e a partir das equações \eqref{eq:mori-zwanzig-pre-mz} e \eqref{eq:mori-zwanzig-dyson-mz}, obtemos:
+\begin{equation}
+    \frac{\partial}{\partial t} e^{tL} x_j = e^{tL} \mathbb{P}L x_j + e^{t\mathbb{Q}L} \mathbb{Q}L x_j + \int_0^t e^{(t-s)L} \mathbb{P}L e^{s\mathbb{Q}L} \mathbb{Q}L x_j \, ds
+    \label{eq:mori-zwanzig}
+\end{equation}
+
+A equação acima expressa a \textit{equação de Mori-Zwanzig}.
+
+\subsection{Análise termo a termo}
+\subsubsection{Primeiro termo}
+O primeiro termo é dado por:
+\begin{equation}
+    e^{tL} \mathbb{P}L x_j
+    \label{eq:primeiro-termo-mz}
+\end{equation}
+
+Note que: 
+\begin{equation*}
+    Lx_j = \sum_i R_i\left(\frac{\partial}{\partial x_i}\right)x_j = R_j(x)
+\end{equation*}
+
+Assim,
+\begin{equation*}
+    \mathbb{P}Lx_j = \mathbb{E}[R_j(x)|\hat{x}] \quad \text{Note que é uma função exclusiva de $\hat{x}$}
+\end{equation*}
 
 \appendix
 \section{Sistemas Hamiltonianos}
 
-\section{Casos particulares apresentados}
 
 \section{Aproximações}
 \newpage

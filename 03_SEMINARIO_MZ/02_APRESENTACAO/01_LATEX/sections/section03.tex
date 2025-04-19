@@ -1,0 +1,63 @@
+
+\section{Mori-Zwanzig}
+
+\begin{frame}{Construção do formalismo MZ}
+\begin{itemize}
+    \item Separação das variáveis: $x = (\hat{x}, \tilde{x})$ e $\phi = (\hat{\phi}, \tilde{\phi})$
+    \item Foco nas $m$ primeiras componentes: variáveis resolvidas.
+    \item Escrevemos: $\hat{\phi}_j(x,t) = e^{tL}x_j$, $1 \leq j \leq m$
+    \item Derivando no tempo:
+    \begin{equation*}
+        \frac{\partial}{\partial t}e^{tL}x_j = e^{tL}Lx_j
+    \end{equation*}
+    \item Com projeções ortogonais: $\mathbb{Q} = I - \mathbb{P}$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Equação de Mori-Zwanzig via Dyson}
+\begin{itemize}
+    \item Fórmula de Dyson aplicada:
+    \begin{equation*}
+        e^{tL} = e^{t\mathbb{Q}L} + \int_0^t e^{(t-s)L} \mathbb{P}L e^{s\mathbb{Q}L} \, ds
+    \end{equation*}
+    \item Substituindo na equação de evolução:
+    \begin{align*}
+        \frac{\partial}{\partial t} e^{tL} x_j = &\ e^{tL} \mathbb{P}L x_j + e^{t\mathbb{Q}L} \mathbb{Q}L x_j \\
+        &+ \int_0^t e^{(t-s)L} \mathbb{P}L e^{s\mathbb{Q}L} \mathbb{Q}L x_j \, ds
+    \end{align*}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Análise termo a termo: markoviano}
+\begin{itemize}
+    \item Primeiro termo: $e^{tL} \mathbb{P}L x_j$
+    \item $Lx_j = R_j(x) \implies \mathbb{P}Lx_j = \mathbb{E}[R_j(x) \mid \hat{x}]$
+    \item Concluímos: $e^{tL} \mathbb{P}Lx_j = \bar{R}_j(\hat{\phi}(x,t))$
+    \item Termo markoviano: depende apenas de $\hat{\phi}(x,t)$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Análise termo a termo: ruído}
+\begin{itemize}
+    \item Segundo termo: $w_j = e^{t\mathbb{Q}L} \mathbb{Q}L x_j$
+    \item Evolui pela equação: $\partial_t w_j = \mathbb{Q}L w_j$
+    \item Condição inicial: $w_j(0) = R_j(x) - \mathbb{E}[R_j(x) \mid \hat{x}]$
+    \item Representa a parte imprevisível, ou \textit{flutuante}, da dinâmica.
+    \item Sempre ortogonal às funções de $\hat{x}$: $\mathbb{P}w_j = 0$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Análise termo a termo: memória}
+\begin{itemize}
+    \item Terceiro termo:
+    \begin{equation*}
+        \int_0^t e^{(t-s)L} \mathbb{P}L e^{s\mathbb{Q}L} \mathbb{Q}L x_j \, ds
+    \end{equation*}
+    \item Termo de \textbf{memória}: depende da história passada do sistema.
+    \item Projeção pode ser expandida em polinômios hermitianos:
+    \begin{equation*}
+        \mathbb{P}L e^{s\mathbb{Q}L} \mathbb{Q}Lx_j = \sum_k \langle L \mathbb{Q} e^{s\mathbb{Q}L} \mathbb{Q}Lx_j, H_k \rangle H_k(\hat{x})
+    \end{equation*}
+    \item Representa uma soma de covariâncias temporais de ruídos.
+\end{itemize}
+\end{frame}

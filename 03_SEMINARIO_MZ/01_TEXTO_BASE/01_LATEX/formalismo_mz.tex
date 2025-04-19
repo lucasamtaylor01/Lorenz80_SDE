@@ -7,7 +7,7 @@
 % Formatação de Página e Estilo de Texto
 \usepackage[a4paper, margin=2cm]{geometry}
 \usepackage{parskip}
-\linespread{1.5}
+\linespread{1}
 \usepackage{csquotes}
 
 % Links
@@ -48,24 +48,38 @@ O principal objetivo do artigo de \citet{Chekroun2021} é simplificar o modelo d
 O método de Mori-Zwanzig, desenvolvido por Robert Walter Zwanzig e Hajime Mori na segunda metade do século XX, é utilizado em sistemas hamiltonianos. Esse método consiste em classificar as variáveis do sistema em duas categorias: ``resolvidas'' e ``não resolvidas''. As variáveis resolvidas são aquelas cujos comportamentos e valores são bem conhecidos, enquanto as não resolvidas são aquelas para as quais não se possui informações diretas. Para substituir essas variáveis não resolvidas, o método introduz termos estocásticos, denominados ruídos (\textit{noise}), além de um termo de amortecimento (\textit{damping}), também conhecido como termo de memória (\textit{memory term}). Essa abordagem permite que o comportamento do sistema de interesse seja preservado de maneira adequada, mesmo sem conhecer completamente as variáveis não resolvidas.
 
 Dada a relevância deste método para o trabalho de \citet{Chekroun2021}, optamos por incluir uma introdução ao formalismo de Mori-Zwanzig, a fim de proporcionar uma melhor compreensão de sua aplicação no contexto do modelo de Lorenz 80 e permitir uma base teórica sólida para eventuais explorações.
+\newpage
+\section{Motivação}
+Consideremos o exemplo de \citet[p.173]{Chorin2013}: um sistema com duas partículas em uma dimensão espacial, com Hamiltoniano dado por:
+\begin{equation*}
+    H = \frac{1}{2}(q_1^2 + q_2^2 + q_1^2 q_2^2 + p_1^2 + p_2^2)
+\end{equation*}
+onde $q_i$ e $p_i$, $i = 1, 2$, representam posições e momentos. Os osciladores harmônicos, uma vez em movimento, oscilam indefinidamente. As equações de movimento são expressas por:
+\begin{align}
+    \dot{q}_1 &= p_1, \nonumber \\
+    \dot{p}_1 &= -q_1(1 + q_2^2), \nonumber \\
+    \dot{q}_2 &= p_2, \nonumber \\
+    \dot{p}_2 &= -q_2(1 + q_1^2).
+    \label{eq:exemplo-sistema-harmonico}
+\end{align}
 
-% Consideremos o seguinte exemplo de \citet{Chorin2013} como motivação: considere um sistema de duas partículas, em um espaço unidimencional com o hamiltoniado dado por:
-% \begin{equation*}
-%     H = \frac{1}{2}\left(q_1 ^2 + q_2^2 + q_1^2q_2^2 + p_1^2 + p_2^2\right)
-% \end{equation*}
-% onde:
-% \begin{align*}
-%     q_1, q_2 &\text{ são posições das partículas 1 e 2, respectivamente}\\
-%     p_1, p_2 &\text{ são os momentos das partículas 1 e 2, respectivamente}
-% \end{align*}
+Suponha que os valores iniciais $q_1(0)$ e $p_1(0)$ sejam conhecidos. Assuma que $q_2(0)$ e $p_2(0)$ são amostrados a partir da função densidade de probabilidade:
+\begin{equation*}
+    W = \frac{e^{-H(q,p)}}{Z}   
+\end{equation*}
 
-% O sistema é descrito por:
-% \begin{align*}
-%     \dot{q_1} &= p_1,\\
-%     \dot{p_1} &= -q_1(1+q_2^2),\\
-%     \dot{q_2} &= p_2,\\
-%     \dot{p_2} &= -q_2(1+q_1^2).
-% \end{align*}
+Essa amostragem pode ser realizada, por exemplo, por meio do método de Monte Carlo via cadeia de Markov.
+
+Dada uma amostra de $q_2(0)$ e $p_2(0)$, o sistema \eqref{eq:exemplo-sistema-harmonico} pode ser resolvido. Contudo, para cada nova amostra de $q_2(0)$ e $p_2(0)$, obtém-se uma trajetória distinta para $q_1(t)$ e $p_1(t)$. Em particular, pode-se querer calcular os valores esperados de $q_1$ e $p_1$ no tempo $t$, dados seus valores iniciais, os quais representam as melhores estimativas de $q_1(t)$ e $p_1(t)$:
+\begin{equation*}
+    \mathbb{E}[q_1(t)\mid q_1(0), p_1(0)], \quad \mathbb{E}[p_1(t)\mid q_1(0), p_1(0)].
+\end{equation*}
+
+Uma vez que $q_2$ e $p_2$ foram amostrados, o sistema completo de quatro equações pode ser resolvido. Isso pode ser feito repetidamente, permitindo calcular a média dos valores de $q_1(t)$ e $p_1(t)$ ao longo de várias execuções.
+
+No entanto, há uma limitação: essa abordagem é adequada apenas para os instantes iniciais do sistema. À medida que o tempo avança, o valor esperado de $q_1(t)$ se distancia do valor real, comprometendo a precisão da aproximação.
+
+\newpage
 
 \section{Prolegômenos}
 \subsection{Escrevendo sistemas de EDO não lineares como sistemas de EDPs lineares}
@@ -125,7 +139,7 @@ onde $v_t$ é a derivada de $v$ em relação ao tempo e $\phi(x)$ é a condiçã
 \begin{equation*}
 	v(t) = e^{\frac{1}{2}t \Delta} \phi.
 \end{equation*}
-Aqui, $e^{\frac{1}{2}t \Delta}$ é um operador semigrupo gerado pela operação de difusão (pelo operador $\Delta$). Ele é aplicado à condição inicial $\phi(x)$, e a solução $v(t)$ descreve a evolução temporal de $v(x,t)$ ao longo do tempo $t$. Essa notação permite representar soluções de equações diferenciais de maneira compacta, explorando a estrutura associativa da operação de semigrupo. Especificamente, ela satisfaz a propriedade de composição:
+Aqui, $\mathbb{E}^{\frac{1}{2}t \Delta}$ é um operador semigrupo gerado pela operação de difusão (pelo operador $\Delta$). Ele é aplicado à condição inicial $\phi(x)$, e a solução $v(t)$ descreve a evolução temporal de $v(x,t)$ ao longo do tempo $t$. Essa notação permite representar soluções de equações diferenciais de maneira compacta, explorando a estrutura associativa da operação de semigrupo. Especificamente, ela satisfaz a propriedade de composição:
 \begin{equation*}
 	e^{\frac{1}{2}(t+s)\Delta} = e^{\frac{1}{2}t \Delta} e^{\frac{1}{2}s \Delta}.
 \end{equation*}
@@ -137,7 +151,7 @@ Dada a notação de semigrupo apresentada anteriormente, aplicamos esta notaçã
 	\label{eq:solucao-sistema-edp-linear-semigrupo}
 \end{equation}
 
-Note que $e^{tL}x$ não representa uma avaliação direta de $e^{tL}$, mas sim a ação do operador $e^{tL}$ sobre o vetor formado pelos componentes $x_i$. Além disso, a função $g$ comuta com a variação temporal das condições iniciais de $x_i$. 
+Note que $\mathbb{E}^{tL}x$ não representa uma avaliação direta de $\mathbb{E}^{tL}$, mas sim a ação do operador $\mathbb{E}^{tL}$ sobre o vetor formado pelos componentes $x_i$. Além disso, a função $g$ comuta com a variação temporal das condições iniciais de $x_i$. 
 
 Vale destacar que $g$ é uma função independente do tempo em relação às variáveis que descrevem o sistema físico, e sua variação ocorre exclusivamente devido à mudança dessas variáveis ao longo do tempo. Assim, a equação \eqref{eq:sistema-edp-linear} pode ser expressa como:
 \begin{equation}
@@ -184,18 +198,6 @@ No caso $n$-dimensional, o produto interno se generaliza para:
 \end{equation*}
 
 De forma mais geral, se $H(q, p)$ é um Hamiltoniano, é possível definir uma família de polinômios nas variáveis $q$ e $p$ que sejam ortonormais com respeito à densidade canônica $Z^{-1} e^{-H/T}$. Os polinômios que satisfazem essa condição ainda são chamados de \textit{polinômios hermitianos}.
-
-O Hamiltoniano $H(q, p)$ descreve a energia total de um sistema físico e, em muitos casos, é expresso como:
-\begin{equation*}
-    H(q, p) = \frac{p^2}{2m} + V(q),
-\end{equation*}
-onde $\frac{p^2}{2m}$ representa a energia cinética e $V(q)$ a energia potencial.
-
-A densidade canônica $Z^{-1} e^{-H/T}$ surge no contexto da mecânica estatística e descreve a distribuição de probabilidade dos estados do sistema em equilíbrio térmico à temperatura $T$. Nessa configuração, dizemos que dois polinômios $f(q, p)$ e $g(q, p)$ são ortonormais quando:
-\begin{equation*}
-    \langle f, g \rangle = \int f(q, p) g(q, p) \, Z^{-1} e^{-H(q, p)/T} \, dq \, dp = \delta_{fg}.
-\end{equation*}
-Esse produto interno ponderado define a ortogonalidade no espaço de fases segundo a medida induzida pela densidade canônica, e é fundamental na análise de sistemas de interesse.
 
 Por fim, para o formalismo de Mori-Zwanzig, consideraremos um espaço $n$-dimensional $\Gamma$ com uma densidade de probabilidade dada. Dividiremos as coordenadas em dois tipos: $\hat{x}$ e $\tilde{x}$. Seja $g$ uma função de $x$; então $\mathbb{P}g = \mathbb{E}[g \mid \hat{x}]$ é uma projeção ortogonal sobre o subespaço das funções de $\hat{x}$.Temos que essa projeção gera um subespaço de polinômios hermitianos que são funções de $\hat{x}$ e projetando sobre esses polinômios.
 
@@ -256,27 +258,71 @@ A equação acima expressa a \textit{equação de Mori-Zwanzig}.
 
 \subsection{Análise termo a termo}
 \subsubsection{Primeiro termo}
-O primeiro termo é dado por:
+O primeiro termo é dado por:  
 \begin{equation}
     e^{tL} \mathbb{P}L x_j
     \label{eq:primeiro-termo-mz}
 \end{equation}
 
-Note que: 
+Observe que:  
 \begin{equation*}
     Lx_j = \sum_i R_i\left(\frac{\partial}{\partial x_i}\right)x_j = R_j(x)
 \end{equation*}
 
-Assim,
+Portanto,  
 \begin{equation*}
-    \mathbb{P}Lx_j = \mathbb{E}[R_j(x)|\hat{x}] \quad \text{Note que é uma função exclusiva de $\hat{x}$}
+    \mathbb{P}Lx_j = \mathbb{E}[R_j(x)\,|\,\hat{x}] \quad \text{Note que esta é uma função exclusivamente de $\hat{x}$.}
 \end{equation*}
 
-\appendix
-\section{Sistemas Hamiltonianos}
+Com isso, podemos concluir que:  
+\begin{equation*}
+    e^{tL}\mathbb{P}Lx_j = \bar{R}_j\left(\hat{\phi}(x,t)\right)
+\end{equation*}
+
+Mais do que isso: o primeiro termo representa a dinâmica própria do sistema nas variáveis resolvidas. Além disso, trata-se de um termo markoviano, pois depende apenas do estado atual do sistema no tempo $t$.
+
+\subsubsection{Segundo termo}
+Para o segundo termo, definimos:
+\begin{equation*}
+    w_j = e^{t\mathbb{Q}L} \mathbb{Q}L x_j
+\end{equation*}
+
+Por definição, temos:
+\begin{align*}
+    \frac{\partial}{\partial t} w_j(x,t) &= \mathbb{Q}L w_j(x,t), \\
+    w_j(x,0) &= \mathbb{Q}L x_j = (I - \mathbb{P})R_j(x) = R_j(x) - \mathbb{E}[R_j \mid \hat{x}].
+\end{align*}
+
+Note que $w_j(x,0) = \mathbb{Q}Lx_j = R_j(x) - \mathbb{E}[R_j(x) \mid \hat{x}]$ representa a \textit{parte flutuante} da variável $R_j(x)$, ou seja, o componente imprevisível dado $\hat{x}$. Essa parte evolui de acordo com as \textit{dinâmicas ortogonais}, de modo que $\mathbb{P} w_j(x,t) = 0$ para todo $t$, mantendo o termo como um ruído puramente não resolvido ao longo do tempo.
+
+Mais especificamente, o subespaço do ruído (\textit{noise subspace}) é formado pelas componentes das funções que são ortogonais às funções de $\hat{x}$, geralmente, isso corresponde a termos que dependem de $\tilde{x}$. 
+
+\subsubsection{Terceiro termo}
+O terceiro termo, dado por:
+\begin{equation*}
+    \int_0^t e^{(t-s)L} \mathbb{P}L e^{s\mathbb{Q}L} \mathbb{Q}L x_j
+\end{equation*}
+é classificado como o termo de memória  (\textit{memory term}), já que este envolve a integração de quantidades que dependem de estados anteriores ao atual.
+
+Tomemos que $\mathbb{P}$ seja projete na extensão dos polinômios hermitianos $H-1, H_2, \ldots$ com argumentos em $\hat{x}$. Assim, para dada função $\psi$, temos que: $\mathbb{P}\psi = \sum (\psi, H_k)H_k$, assim, temos:
+\begin{align*}
+    \mathbb{P}Le^{s\mathbb{Q}L} \mathbb{Q}Lx_j &= \mathbb{P}L(\mathbb{P} + \mathbb{Q})e^{s\mathbb{Q}L} \mathbb{Q}Lx_j \\
+    &= \mathbb{P}L\mathbb{Q}e^{s\mathbb{Q}L} \mathbb{Q}Lx_j \\
+    &= \sum_k \langle L\mathbb{Q}e^{s\mathbb{Q}L} \mathbb{Q}Lx_j, H_k(\hat{x}) \rangle H_k(\hat{x}).
+\end{align*}
+
+O produto interno é definido como um valor esperado com respeito à densidade de probabilidade inicial. Vamos assumir que $L$ é antissimétrico, ou seja, $(u, Lv) = -(Lu, v)$, então:
+\begin{align*}
+    (L Q e^{s Q L} Q L x_j, H_k(\hat{x})) 
+    &= - (Q e^{s Q L} Q L x_j, L H_k) \\
+    &= - (e^{s Q L} Q L x_j, Q L H_k).
+\end{align*}
+
+Tanto $Q L x_j$ quanto $Q L H_k$ estão no subespaço de ruído, e $\mathbb{E}^{s Q L} Q L x_j$ é uma solução no tempo $s$ da equação de dinâmica ortogonal com dados no subespaço de ruído; $P L e^{s Q L} Q L x_j$ é então uma \textbf{soma de covariâncias temporais de ruídos}.
 
 
-\section{Aproximações}
+
+
 \newpage
 \nocite{*}
 \printbibliography

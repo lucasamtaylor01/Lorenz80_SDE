@@ -7,7 +7,7 @@
 % Formatação de Página e Estilo de Texto
 \usepackage[a4paper, margin=2cm]{geometry}
 \usepackage{parskip}
-\linespread{1}
+\linespread{1.5}
 \usepackage{csquotes}
 
 % Links
@@ -185,7 +185,7 @@ em que $\delta_{nm}$ é o delta de Kronecker, que apresenta as propriedades:
 	      \begin{equation*}
 	      	\langle p_n, p_m \rangle = 0 \quad \text{quando} \quad n \neq m
 	      \end{equation*}
-	          
+	      	          
 	\item \textbf{Normalização}: Para $n = m$, os polinômios são normalizados, de modo que o produto interno é igual a 1:
 	      \begin{equation*}
 	      	\langle p_n, p_n \rangle = 1
@@ -288,10 +288,11 @@ Para o segundo termo, definimos:
 \end{equation*}
 
 Por definição, temos:
-\begin{align*}
-	\frac{\partial}{\partial t} w_j(x,t) & = \mathbb{Q}L w_j(x,t),                                                             \\
+\begin{align}
+	\frac{\partial}{\partial t} w_j(x,t) & = \mathbb{Q}L w_j(x,t),\\
 	w_j(x,0)                             & = \mathbb{Q}L x_j = (I - \mathbb{P})R_j(x) = R_j(x) - \mathbb{E}[R_j \mid \hat{x}]. 
-\end{align*}
+    \label{eq:mori-zwanzig-dinamica-ortogonal}
+\end{align}
 
 Note que $w_j(x,0) = \mathbb{Q}Lx_j = R_j(x) - \mathbb{E}[R_j(x) \mid \hat{x}]$ representa a \textit{parte flutuante} da variável $R_j(x)$, ou seja, o componente imprevisível dado $\hat{x}$. Essa parte evolui de acordo com as \textit{dinâmicas ortogonais}, de modo que $\mathbb{P} w_j(x,t) = 0$ para todo $t$, mantendo o termo como um ruído puramente não resolvido ao longo do tempo.
 
@@ -306,9 +307,9 @@ O terceiro termo, dado por:
 
 Tomemos que $\mathbb{P}$ seja projete na extensão dos polinômios hermitianos $H-1, H_2, \ldots$ com argumentos em $\hat{x}$. Assim, para dada função $\psi$, temos que: $\mathbb{P}\psi = \sum (\psi, H_k)H_k$, assim, temos:
 \begin{align*}
-	\mathbb{P}Le^{s\mathbb{Q}L} \mathbb{Q}Lx_j &= \mathbb{P}L(\mathbb{P} + \mathbb{Q})e^{s\mathbb{Q}L} \mathbb{Q}Lx_j\\
-	                                           &= \mathbb{P}L\mathbb{Q}e^{s\mathbb{Q}L} \mathbb{Q}Lx_j\\
-	                                           &= \sum_k \langle L\mathbb{Q}e^{s\mathbb{Q}L} \mathbb{Q}Lx_j, H_k(\hat{x}) \rangle H_k(\hat{x}). 
+	\mathbb{P}Le^{s\mathbb{Q}L} \mathbb{Q}Lx_j & = \mathbb{P}L(\mathbb{P} + \mathbb{Q})e^{s\mathbb{Q}L} \mathbb{Q}Lx_j                           \\
+	                                           & = \mathbb{P}L\mathbb{Q}e^{s\mathbb{Q}L} \mathbb{Q}Lx_j                                          \\
+	                                           & = \sum_k \langle L\mathbb{Q}e^{s\mathbb{Q}L} \mathbb{Q}Lx_j, H_k(\hat{x}) \rangle H_k(\hat{x}). 
 \end{align*}
 
 O produto interno é definido como um valor esperado com respeito à densidade de probabilidade inicial. Vamos assumir que $L$ é antissimétrico, ou seja, $(u, Lv) = -(Lu, v)$, então:
@@ -320,9 +321,117 @@ O produto interno é definido como um valor esperado com respeito à densidade d
 
 Tanto $Q L x_j$ quanto $Q L H_k$ estão no subespaço de ruído, e $\mathbb{E}^{s Q L} Q L x_j$ é uma solução no tempo $s$ da equação de dinâmica ortogonal com dados no subespaço de ruído; $P L e^{s Q L} Q L x_j$ é então uma \textbf{soma de covariâncias temporais de ruídos}.
 
+\newpage
 
+\section{Voltando à motivação}
 
+\subsection{Introdução}
+Inicialmente, vamos relembrar o problema em questão: temos um sistema hamiltoniano, com o hamiltoniano definido por  
+\begin{equation*}
+	H = \frac{1}{2}(q_1^2 + q_2^2 + q_1^2 q_2^2 + p_1^2 + p_2^2).
+\end{equation*}
 
+As equações do movimento associadas são dadas por:  
+\begin{align*}
+	\dot{q}_1 & = p_1, \nonumber             \\
+	\dot{p}_1 & = -q_1(1 + q_2^2), \nonumber \\
+	\dot{q}_2 & = p_2, \nonumber             \\
+	\dot{p}_2 & = -q_2(1 + q_1^2).           
+\end{align*}
+
+Aplicando o \textit{Operador de Liouville}, obtemos:  
+\begin{equation*}
+	L = p_1 \frac{\partial}{\partial q_1} - q_1(1 + q_2^2)\frac{\partial}{\partial p_1}
+	+ p_2 \frac{\partial}{\partial q_2} - q_2(1 + q_1^2)\frac{\partial}{\partial p_2}.
+\end{equation*}
+
+Como antes, assumimos que os valores iniciais $q_1(0)$ e $p_1(0)$ são conhecidos, enquanto $q_2$ e $p_2$ são definidos por uma função densidade de probabilidade dada por:
+\begin{equation*}
+	W(x) = \exp\left(\frac{-H(q_1,p_1,q_2,p_2)}{Z}\right) \quad \text{(uma densidade canônica com temperatura $T = 1$).}
+\end{equation*}
+
+Nosso objetivo é avaliar $q_1(t)$ e $p_1(t)$ a partir das equações de Mori-Zwanzig \eqref{eq:mori-zwanzig}.
+
+\subsection{Primeira aproximação}
+Dada a natureza do sistema, é necessário realizar uma aproximação para introduzir o termo de memória. Sabemos que as dinâmicas ortogonais descritas em \eqref{eq:mori-zwanzig-dinamica-ortogonal} são aproximadamente equivalentes às dinâmicas completas, uma vez que não são sensíveis às variáveis resolvidas. Com base nisso, a aproximação consiste em substituir $e^{t\mathbb{Q}L}$ por $e^{tL}$ no termo de memória. Essa substituição é válida quando a influência das variáveis resolvidas sobre as não resolvidas é pequena\footnote{Essa substituição é justificada quando o acoplamento entre as variáveis resolvidas e não resolvidas é fraco.}. 
+
+Dito isso, podemos iniciar a manipulação algébrica. Um operador comuta com qualquer função de si mesmo, de modo que:
+\begin{equation*}
+	\mathbb{Q}Le^{s\mathbb{Q}L} = e^{s\mathbb{Q}L} \mathbb{Q}L.
+\end{equation*}
+Usando essa identidade e substituindo $e^{s\mathbb{Q}L} \to e^{sL}$ no lado direito da igualdade, obtemos:
+\begin{equation*}
+	\mathbb{P}Le^{s\mathbb{Q}L} \approx Le^{sL} - e^{sL} \mathbb{Q}L.
+\end{equation*}
+Então,
+\begin{equation*}
+	e^{(t-s)L} \mathbb{P}Le^{s\mathbb{Q}L} \approx e^{(t-s)L} Le^{sL} - e^{(t-s)L} e^{sL} \mathbb{Q}L = e^{tL} \mathbb{P}L,
+\end{equation*}
+o que torna o integrando no termo integral da equação de Mori-Zwanzig independente de $s$, resultando em:
+\begin{equation*}
+	\int_0^t e^{tL} \mathbb{P}L \mathbb{Q}L x_j \, ds = t e^{tL} \mathbb{P}L \mathbb{Q}L x_j,
+\end{equation*}
+onde $\hat{x}$ é o vetor com componentes $x_1 = q_1$ e $x_2 = p_1$. O termo de memória foi assim reduzido a um operador diferencial multiplicado pelo tempo $t$. Note que $t = 0$ corresponde ao instante em que os valores iniciais de $q_1(t)$ e $p_1(t)$ são atribuídos, ou seja, quando não há incerteza. Essa aproximação também pode ser justificada assumindo que o integrando no termo de memória é aproximadamente constante em $s$, e portanto pode ser avaliado em $s = 0$.
+
+As equações com o termo integral simplificado constituem o chamado modelo-$t$. Reunindo os termos, temos:
+\begin{equation*}
+	\frac{d}{dt} e^{tL} \hat{x} = e^{tL} \mathbb{P}L \hat{x} + t e^{tL} \mathbb{P}L \mathbb{Q}L \hat{x} + e^{tL} \mathbb{Q}L \mathbb{Q}L x_j.
+\end{equation*}
+
+No caso particular considerado, com os componentes $x_j = q_1$ e $x_j = p_1$, obtemos:
+\begin{align*}
+	Lq_1                        & = p_1, \\
+	\mathbb{P}Lq_1              & = p_1, \\
+	\mathbb{Q}Lq_1              & = 0,   \\
+	L\mathbb{Q}Lq_1             & = 0,   \\
+	\mathbb{P}L \mathbb{Q}L q_1 & = 0,   
+\end{align*}
+e
+\begin{align*}
+	Lp_1 &= -q_1(1 + q_2^2),\\
+	\mathbb{P}Lp_1 &= -q_1\left(1 + \frac{1}{1 + q_1^2}\right),\\
+	\mathbb{Q}Lp_1 &= -q_1(1 + q_2^2) + q_1\left(1 + \frac{1}{1 + q_1^2}\right),\\
+	L\mathbb{Q}Lp_1 &= p_1\left(- (1 + q_2^2) + \left(1 + \frac{1}{1 + q_1^2} \right) \right) - \frac{2q_1^2}{(1 + q_1^2)^2} - 2q_1 q_2 p_2, \\
+	\mathbb{P}L\mathbb{Q}Lp_1 & = -\frac{2q_1^2 p_1}{(1 + q_1^2)^2}.
+\end{align*}
+
+Assim, as equações aproximadas de movimento para $q_1$ e $p_1$ tornam-se:
+\begin{align}
+	\frac{d}{dt} q_1 & = p_1, \nonumber \\
+	\frac{d}{dt} p_1 & = -q_1\left(1 + \frac{1}{1 + q_1^2}\right) - 2t\frac{q_1^2 p_1}{(1 + q_1^2)^2} + e^{tL} \mathbb{Q}L \mathbb{Q}L p_1. \label{eq:mori-zwanzig-sistema-hamiltoniano}
+\end{align}
+
+Suponha agora que desejamos conhecer apenas as quantidades:
+\begin{equation*}
+	\mathbb{E}[q_1(t) \mid q_1(0), p_1(0)], \quad \mathbb{E}[p_1(t) \mid q_1(0), p_1(0)],
+\end{equation*}
+ou seja, as esperanças condicionais de $q_1(t)$ e $p_1(t)$ dado $q_1(0), p_1(0)$. 
+
+Uma equação para essas quantidades pode ser obtida aplicando o operador $\mathbb{P}$ às equações \eqref{eq:mori-zwanzig-sistema-hamiltoniano}, lembrando que, por definição, $\mathbb{P}q_1(t) = \mathbb{E}[q_1(t) \mid q_1(0), p_1(0)]$, e de forma análoga para $p_1(t)$. Nesse processo, o termo de ruído desaparece.
+
+Contudo, surge um problema: a média de uma função de uma variável, em geral, não é igual à função da média. Para contornar essa dificuldade, uma simplificação adicional é necessária. Essa complicação pode ser evitada ao considerar trajetórias específicas das variáveis resolvidas, onde tal distinção se torna irrelevante, permitindo aplicar diretamente as equações aproximadas sem as dificuldades associadas às dinâmicas ortogonais.
+
+\subsection{Segunda aproximação}
+
+Assuma que, para as funções no lado direito das equações \eqref{eq:mori-zwanzig-sistema-hamiltoniano}, a operação de média e a avaliação da função comutam. Isso significa que, por exemplo,
+\begin{equation*}
+    \mathbb{E}[(1 + q_1^2(t))^{-1} \mid q_1(0), p_1(0)] \approx \left(1 + \mathbb{E}[q_1(t) \mid \cdot]^2\right)^{-1}.
+\end{equation*}
+
+Essa aproximação de campo médio é válida quando o ruído é suficientemente pequeno. No caso limite em que o ruído é nulo, a aproximação torna-se exata. No problema específico considerado, essa hipótese deve ser razoável caso os dados iniciais sejam amostrados de uma densidade canônica com temperatura baixa. Aqui, utilizamos uma temperatura inicial \(T = 1\).
+
+Com isso, definimos:
+\begin{equation*}
+    Q_1(t) = \mathbb{E}[q_1(t) \mid q_1(0), p_1(0)], \quad P_1(t) = \mathbb{E}[p_1(t) \mid q_1(0), p_1(0)].
+\end{equation*}
+
+As equações aproximadas de movimento passam a ser:
+\begin{align*}
+    \frac{d}{dt} Q_1 &= P_1,\\
+    \frac{d}{dt} P_1 &= -Q_1\left(1 + \frac{1}{1 + Q_1^2} \right) - t \cdot \frac{2 Q_1^2 P_1}{(1 + Q_1^2)^2}.
+\end{align*}
+
+A equação acima é resolvível numericamente e, a partir dela, temos a aproximação de Mori-Zwanzig para o nosso problema de interesse.
 \newpage
 \nocite{*}
 \printbibliography

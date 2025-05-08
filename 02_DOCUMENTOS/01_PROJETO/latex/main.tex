@@ -5,15 +5,9 @@
 \usepackage[brazilian]{babel}
 
 % Layout da página e espaçamento
-\usepackage[
-    a4paper,
-    left=3cm,
-    right=2cm,
-    top=3cm,
-    bottom=2cm
-]{geometry}
+\usepackage[a4paper, left=3cm, right=2cm, top=3cm, bottom=2cm]{geometry}
 \usepackage{setspace}
-\usepackage{parskip}  
+\usepackage{parskip}
 
 % Matemática
 \usepackage{amsmath, amssymb}
@@ -25,10 +19,10 @@
 \usepackage{enumitem}
 \usepackage{booktabs}
 
-% Texto falso para exemplos
+% Texto fictício
 \usepackage{lipsum}
 
-% Citações e referências bibliográficas
+% Citações e bibliografia
 \usepackage{csquotes}
 \usepackage[
     style=authoryear-comp,
@@ -40,11 +34,13 @@
     doi=true,
     url=true,
     giveninits=true,
-    uniquename=init, 
+    uniquename=init,
     sorting=nyt,
-    language=portuguese
+    language=portuguese,
+    natbib=true
 ]{biblatex}
 \addbibresource{referencias.bib}
+
 
 
 \begin{document}
@@ -59,36 +55,35 @@
     
     {\LARGE\bfseries Projeto\par}
     \vspace{1cm}
-    {\LARGE\bfseries Título do projeto\par}
+    {\LARGE\bfseries Um abordagem estocástica do\\ Modelo Lorenz 80\par}
     
     \vfill
     
     \begin{minipage}[t]{0.45\textwidth}
         \raggedright
         \textbf{Orientador:} \par
-        Prof. Dr. Nome do orientador \par
-        \texttt{email\_do\_orientador@email.com} \par
+        Prof. Dr. Breno Raphaldini Ferreira da Silva  \par
+        \texttt{brenorfs@gmail.com} \par
         \textit{IME-USP} \par\medskip
-    
-        \textbf{Coorientador:} \par
-        Prof. Dr. Nome do coorientador \par
-        \texttt{email\_do\_coorientador@email.com} \par
-        \textit{IME-USP}
     \end{minipage}
     \hfill
     \begin{minipage}[t]{0.45\textwidth}
         \raggedright
         \textbf{Aluno:} \par
-        Seu Nome \par
-        NUSP: 12345678 \par
-        \texttt{seu\_email@usp.br} \par
+        Lucas Amaral Taylor \par
+        NUSP: 13865062 \par
+        \texttt{lucasamtaylor@usp.br} \par
         \textit{IME-USP}
     \end{minipage}
     \vspace{2cm}
 \end{titlepage}
 
 \section*{Introdução}
-\lipsum[1-2]
+Em janeiro de 2025, o aluno Lucas Amaral Taylor cursou a disciplina \textbf{MAP5007 - Ondas em Fluidos Geofísicos} oferecida no programa de verão do Instituto de Matemática e Estatística (IME-USP), ministrada pelo Prof. Dr. Breno Raphaldini Ferreira da Silva e com o objetivo de apresentar conceitos básicos da dinâmica de fluidos geofísicos por uma abordagem matemática \citep{uspJanus}. 
+
+Ao final da disciplina, o aluno realizou um seminário com o tema ``Um breve estudo do Modelo Lorenz 80''. O seminário consistia em apresentar os aspectos gerais do modelo geofísico apresentado por Edward Norton Lorenz no artigo ``\textit{Attractor Sets and Quasi-Geostrophic Equilibrium}'' \citep{Lorenz1980}.  
+
+Vale destacar que, os arquivos do seminário estão disponíveis publicamente no repositório do \textit{GitHub}. \citep{TaylorL80}
 
 \section*{Objetivos}
 \begin{enumerate}
@@ -119,12 +114,14 @@
     \toprule
     \textbf{Mês} & \textbf{Atividade} \\
     \midrule
-    Julho & \lipsum[1][1] \\
-    Agosto & \lipsum[2][1] \\
-    Setembro & \lipsum[3][1] \\
-    Outubro & \lipsum[4][1] \\
-    Novembro & \lipsum[5][1] \\
-    Dezembro & \lipsum[6][1] \\
+    Abril   & Definição de tema, orientador e seleção das principais referências.  \\
+    Maio    & Introdução ao formalismo de Mori-Zwanzig; Introdução à linguagem Julia; \\
+    Junho   & \lipsum[3][1] \\
+    Julho   & \lipsum[4][1] \\
+    Agosto  & \lipsum[5][1] \\
+    Setembro& \lipsum[6][1] \\
+    Outubro & Conclusão da monografia \\
+    Novembro & Revisão, tradução e apresentação  \\
     \bottomrule
 \end{tabular}
 \end{center}

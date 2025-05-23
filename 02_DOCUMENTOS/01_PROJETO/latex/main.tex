@@ -79,11 +79,20 @@
 \end{titlepage}
 
 \section*{Introdução}
+Em janeiro de 2025, o aluno Lucas Amaral Taylor cursou a disciplina \textbf{MAP5007 - Ondas em Fluidos Geofísicos}, oferecida no programa de verão do Instituto de Matemática e Estatística (IME-USP), ministrada pelo Prof. Dr. Breno Raphaldini Ferreira da Silva. A disciplina teve como objetivo apresentar conceitos básicos da dinâmica de fluidos geofísicos por meio de uma abordagem matemática \citep{uspJanus}.
 
+Ao final da disciplina, o aluno realizou um seminário com o tema ``\textit{Um breve estudo do Modelo Lorenz 80}'', cujo objetivo foi apresentar os aspectos gerais do modelo geofísico desenvolvido por Edward Norton Lorenz no artigo ``\textit{Attractor Sets and Quasi-Geostrophic Equilibrium}'' \citep{Lorenz1980}. Os arquivos do seminário estão disponíveis publicamente no repositório do \textit{GitHub} \citep{TaylorL80}.
 
-Em janeiro de 2025, o aluno Lucas Amaral Taylor cursou a disciplina \textbf{MAP5007 - Ondas em Fluidos Geofísicos} oferecida no programa de verão do Instituto de Matemática e Estatística (IME-USP), ministrada pelo Prof. Dr. Breno Raphaldini Ferreira da Silva e com o objetivo de apresentar conceitos básicos da dinâmica de fluidos geofísicos por uma abordagem matemática \citep{uspJanus}. 
+O presente trabalho de conclusão de curso é uma extensão desse estudo prévio. Em novembro de 2021, foi publicado o artigo ``\textit{Stochastic Rectification of Fast Oscillations on Slow Manifold Closures}'' \citep{Chekroun2021}, que propõe uma abordagem estocástica para sistemas lentos-rápidos, utilizando métodos da física estatística. Para tal, emprega-se o modelo de Lorenz 80 como caso de estudo e, particularmente, o método de Mori-Zwanzig, que, sucintamente, é um método da física estatística que separa a dinâmica de um sistema em partes relevantes e irrelevantes por meio de operadores de projeção.
 
-Ao final da disciplina, o aluno realizou um seminário com o tema ``Um breve estudo do Modelo Lorenz 80''. O seminário consistia em apresentar os aspectos gerais do modelo geofísico apresentado por Edward Norton Lorenz no artigo ``\textit{Attractor Sets and Quasi-Geostrophic Equilibrium}'' \citep{Lorenz1980}. Os arquivos do seminário estão disponíveis publicamente no repositório do \textit{GitHub}. \citep{TaylorL80}
+Um dos aspectos fundamentais do método de Mori-Zwanzig é que, ao projetar a dinâmica de um sistema sobre um subespaço de variáveis relevantes, os efeitos das variáveis descartadas não desaparecem. Eles são incorporados na dinâmica efetiva na forma de dois termos adicionais: um termo markoviano, que representa a influência dos estados passados, e um termo de ruído, que traduz a variabilidade não resolvida. 
+
+Neste trabalho, serão abordados o arcabouço teórico necessário para a compreensão do método de Mori-Zwanzig, sua construção e suas propriedades. Além disso, realizaremos simulações computacionais utilizando a linguagem Julia e, em especial, a biblioteca \textit{SciML: Open Source Software for Scientific Machine Learning}, que oferece ferramentas para o tratamento de equações diferenciais estocásticas. 
+
+✨Como extensão do trabalho apresentado por \citet{Chekroun2021}, também exploraremos diferentes estruturas e características do ruído, investigando como sua modelagem impacta a dinâmica efetiva do modelo de Lorenz 80. A intenção é avaliar se abordagens alternativas ou complementares para a representação do ruído podem enriquecer ou aperfeiçoar os resultados obtidos na formulação estocástica do sistema.
+
+Por fim, ressalta-se que este trabalho integra conhecimentos em análise, equações diferenciais ordinárias, equações diferenciais parciais, álgebra linear, estatística, física e computação. Esses tópicos estão diretamente alinhados com a formação do curso de Bacharelado em Matemática Computacional com habilitação em Métodos Matemáticos. Dessa forma, o trabalho de conclusão de curso configura-se como uma atividade de caráter transversal e interdisciplinar, abrangendo de maneira integrada os conteúdos desenvolvidos ao longo da graduação.
+
 
 \section*{Objetivos}
 \begin{enumerate}
@@ -125,7 +134,7 @@ Ao final da disciplina, o aluno realizou um seminário com o tema ``Um breve est
     \bottomrule
 \end{tabular}
 \end{center}
-
+\newpage
 \nocite{*}
 \printbibliography[title={Referências}, label={sec:bib}]
 

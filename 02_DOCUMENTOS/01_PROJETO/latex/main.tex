@@ -21,9 +21,9 @@
 
 % Texto fictício
 \usepackage{lipsum}
+\usepackage{csquotes}
 
 % Citações e bibliografia
-\usepackage{csquotes}
 \usepackage[
     style=authoryear-comp,
     backend=biber,
@@ -41,7 +41,10 @@
 ]{biblatex}
 \addbibresource{referencias.bib}
 
-
+\setlength\bibitemsep{1.2\baselineskip}
+\setlength\bibhang{1.25em}
+\setlength\bibindent{0em}
+\renewcommand*{\bibfont}{\small\setstretch{1.1}}
 
 \begin{document}
 
@@ -55,8 +58,10 @@
     
     {\LARGE\bfseries Projeto\par}
     \vspace{1cm}
-    {\LARGE\bfseries Um abordagem estocástica do\\ Modelo Lorenz 80\par}
-    
+    {\LARGE\bfseries Uma abordagem estocástica do Modelo de Lorenz 80\par}
+    \vspace{0.5em}
+    {\large\bfseries A stochastic approach for the Lorenz 80 model\par}
+
     \vfill
     
     \begin{minipage}[t]{0.45\textwidth}
@@ -78,59 +83,78 @@
     \vspace{2cm}
 \end{titlepage}
 
+\newpage
+\section*{Resumo}
+O presente trabalho de conclusão de curso visa investigar uma modelagem estocástica do modelo Lorenz 80, empregando o formalismo de Mori-Zwanzig como a principal ferramenta teórica.  O projeto abarca um exame teórico aprofundado do formalismo de Mori-Zwanzig, a investigação de equações diferenciais estocásticas e a avaliação das particularidades do modelo Lorenz 80.  Além disso, são realizadas simulações numéricas utilizando a linguagem Julia e a biblioteca SciML, o que possibilita a análise do efeito de diversas configurações de ruído na dinâmica efetiva do sistema.  Busca-se, igualmente, investigar e incorporar novas modalidades de ruído ao modelo, examinando suas consequências físicas e matemáticas nas soluções simuladas.  A pesquisa é marcada por sua abordagem interdisciplinar, que combina saberes de matemática, física e computação, e visa promover a compreensão e o aperfeiçoamento de métodos de modelagem em sistemas dessa categoria.
+
+\section*{Abstract}
+This final project aims to investigate the stochastic modeling of the Lorenz 80 model, using the Mori-Zwanzig formalism as the main theoretical tool.  The project includes an in-depth theoretical examination of the Mori-Zwanzig formalism, the investigation of stochastic differential equations and the evaluation of the particularities of the Lorenz 80 model.  Numerical simulations are also carried out using the Julia language and the SciML library, making it possible to analyze the effect of various noise configurations on the effective dynamics of the system.  The aim is also to investigate and incorporate new types of noise into the model, examining their physical and mathematical consequences on the simulated solutions.  The research is marked by its interdisciplinary approach, which combines knowledge of mathematics, physics and computing, and aims to promote the understanding and improvement of modeling methods in systems of this category
+
+\newpage
+
 \section*{Introdução}
-Em janeiro de 2025, o aluno Lucas Amaral Taylor cursou a disciplina \textbf{MAP5007 - Ondas em Fluidos Geofísicos}, oferecida no programa de verão do Instituto de Matemática e Estatística (IME-USP), ministrada pelo Prof. Dr. Breno Raphaldini Ferreira da Silva. A disciplina teve como objetivo apresentar conceitos básicos da dinâmica de fluidos geofísicos por meio de uma abordagem matemática \citep{uspJanus}.
-
-Ao final da disciplina, o aluno realizou um seminário com o tema ``\textit{Um breve estudo do Modelo Lorenz 80}'', cujo objetivo foi apresentar os aspectos gerais do modelo geofísico desenvolvido por Edward Norton Lorenz no artigo ``\textit{Attractor Sets and Quasi-Geostrophic Equilibrium}'' \citep{Lorenz1980}. Os arquivos do seminário estão disponíveis publicamente no repositório do \textit{GitHub} \citep{TaylorL80}.
-
-O presente trabalho de conclusão de curso é uma extensão desse estudo prévio. Em novembro de 2021, foi publicado o artigo ``\textit{Stochastic Rectification of Fast Oscillations on Slow Manifold Closures}'' \citep{Chekroun2021}, que propõe uma abordagem estocástica para sistemas lentos-rápidos, utilizando métodos da física estatística. Para tal, emprega-se o modelo de Lorenz 80 como caso de estudo e, particularmente, o método de Mori-Zwanzig, que, sucintamente, é um método da física estatística que separa a dinâmica de um sistema em partes relevantes e irrelevantes por meio de operadores de projeção.
-
-Um dos aspectos fundamentais do método de Mori-Zwanzig é que, ao projetar a dinâmica de um sistema sobre um subespaço de variáveis relevantes, os efeitos das variáveis descartadas não desaparecem. Eles são incorporados na dinâmica efetiva na forma de dois termos adicionais: um termo markoviano, que representa a influência dos estados passados, e um termo de ruído, que traduz a variabilidade não resolvida. 
-
-Neste trabalho, serão abordados o arcabouço teórico necessário para a compreensão do método de Mori-Zwanzig, sua construção e suas propriedades. Além disso, realizaremos simulações computacionais utilizando a linguagem Julia e, em especial, a biblioteca \textit{SciML: Open Source Software for Scientific Machine Learning}, que oferece ferramentas para o tratamento de equações diferenciais estocásticas. 
-
-✨Como extensão do trabalho apresentado por \citet{Chekroun2021}, também exploraremos diferentes estruturas e características do ruído, investigando como sua modelagem impacta a dinâmica efetiva do modelo de Lorenz 80. A intenção é avaliar se abordagens alternativas ou complementares para a representação do ruído podem enriquecer ou aperfeiçoar os resultados obtidos na formulação estocástica do sistema.
-
-Por fim, ressalta-se que este trabalho integra conhecimentos em análise, equações diferenciais ordinárias, equações diferenciais parciais, álgebra linear, estatística, física e computação. Esses tópicos estão diretamente alinhados com a formação do curso de Bacharelado em Matemática Computacional com habilitação em Métodos Matemáticos. Dessa forma, o trabalho de conclusão de curso configura-se como uma atividade de caráter transversal e interdisciplinar, abrangendo de maneira integrada os conteúdos desenvolvidos ao longo da graduação.
-
-
+    Em \citet{Lorenz1980}, Edward N. Lorenz desenvolve o \textit{Modelo de Lorenz 80} com o objetivo de estudar a dinâmica de sistemas atmosféricos forçados e dissipativos. A partir das equações de águas rasas com topografia, é construído um modelo de baixa ordem com nove equações diferenciais ordinárias — um sistema baseado em equações primitivas. Em seguida, ao eliminar os termos de derivadas temporais nas equações de divergência, obtém-se uma versão quasi-geostrófica com apenas três equações. O modelo apresenta duas escalas distintas de movimento: oscilações rápidas, associadas a ondas gravitacionais, e oscilações lentas, quasi-geostrófico. Com o tempo, as componentes rápidas se dissipam, e a dinâmica se concentra em uma variedade invariante de dimensão reduzida, onde o equilíbrio quasi-geostrófico é uma boa aproximação.
+    
+    Em janeiro de 2025, o aluno Lucas Amaral Taylor cursou a disciplina \textbf{MAP5007 - Ondas em Fluidos Geofísicos}, oferecida no programa de verão do Instituto de Matemática e Estatística (IME-USP), ministrada pelo Prof. Dr. Breno Raphaldini Ferreira da Silva. A disciplina teve como objetivo apresentar conceitos básicos da dinâmica de fluidos geofísicos por meio de uma abordagem matemática \citep{uspJanus}.
+    
+    Ao final da disciplina, o aluno realizou um seminário com o tema ``\textit{Um breve estudo do Modelo Lorenz 80}'', cujo objetivo foi apresentar os aspectos gerais do modelo geofísico desenvolvido por Edward Norton Lorenz no artigo ``\textit{Attractor Sets and Quasi-Geostrophic Equilibrium}'' \citep{Lorenz1980}. Os arquivos do seminário estão disponíveis publicamente no repositório do \textit{GitHub} \citep{TaylorL80}.
+    
+    O presente trabalho de conclusão de curso é uma extensão desse estudo prévio. Em novembro de 2021, foi publicado o artigo ``\textit{Stochastic Rectification of Fast Oscillations on Slow Manifold Closures}'' \citep{Chekroun2021}, que propõe uma abordagem estocástica para sistemas lentos-rápidos, utilizando métodos da física estatística. Para tal, emprega-se o modelo de Lorenz 80 como caso de estudo e, particularmente, o método de Mori-Zwanzig, que, sucintamente, é um método da física estatística que separa a dinâmica de um sistema em partes relevantes e irrelevantes por meio de operadores de projeção.
+    
+    Um dos aspectos fundamentais do método de Mori-Zwanzig é que, ao projetar a dinâmica de um sistema sobre um subespaço de variáveis relevantes, os efeitos das variáveis descartadas não desaparecem. Eles são incorporados na dinâmica efetiva na forma de dois termos adicionais: um termo markoviano, que representa a influência dos estados passados, e um termo de ruído, que traduz a variabilidade não resolvida. 
+    
+    Neste trabalho, serão abordados o arcabouço teórico necessário para a compreensão do método de Mori-Zwanzig, sua construção e suas propriedades. Além disso, realizaremos simulações computacionais utilizando a linguagem Julia e, em especial, a biblioteca \textit{SciML: Open Source Software for Scientific Machine Learning}, que oferece ferramentas para o tratamento de equações diferenciais estocásticas. 
+    
+    Como extensão do trabalho apresentado por \citet{Chekroun2021}, também exploraremos diferentes estruturas e características do ruído, investigando como sua modelagem impacta a dinâmica efetiva do modelo de Lorenz 80. A intenção é avaliar se abordagens alternativas ou complementares para a representação do ruído podem enriquecer ou aperfeiçoar os resultados obtidos na formulação estocástica do sistema.
+    
+    Por fim, ressalta-se que este trabalho integra conhecimentos em análise, equações diferenciais ordinárias, equações diferenciais parciais, álgebra linear, estatística, física e computação. Esses tópicos estão diretamente alinhados com a formação do curso de Bacharelado em Matemática Computacional com habilitação em Métodos Matemáticos. Dessa forma, o trabalho de conclusão de curso configura-se como uma atividade de caráter transversal e interdisciplinar, abrangendo de maneira integrada os conteúdos desenvolvidos ao longo da graduação.
+    
 \section*{Objetivos}
+O presente trabalho, baseia-se em três principais objetivos:
 \begin{enumerate}
-    \item \lipsum[1][1-2]
+    \item \textbf{Compreensão e manipulação dos objetos matemáticos fundamentais para o desenvolvimento do modelo.}
     \begin{enumerate}
-        \item \lipsum[2][1]
-        \item \lipsum[2][2]
+        \item Estudo aprofundado do formalismo de Mori-Zwanzig, incluindo sua fundamentação teórica e aplicações em sistemas dinâmicos lentos-rápidos;
+        \item Análise das propriedades gerais de equações diferenciais estocásticas;
+        \item Estudo das particularidades do modelo de Lorenz 80, tanto na versão determinística quanto na versão estocástica, considerando suas implicações físicas e matemáticas.
     \end{enumerate}
-    \item \lipsum[1][1-2]
+
+    \item \textbf{Desenvolvimento de habilidades em ferramentas computacionais.}
     \begin{enumerate}
-        \item \lipsum[2][1]
-        \item \lipsum[2][2]
+        \item Domínio de linguagens computacionais voltadas à simulação e análise de modelos matemáticos, especialmente \textit{Julia} e \textit{Python}, com foco na utilização de bibliotecas científicas;
+        \item Capacidade de implementar, otimizar e interpretar rotinas computacionais para simulações numéricas.
     \end{enumerate}
-    \item \lipsum[1][1-2]
+
+    \item \textbf{Análise exploratória e integração entre teoria e prática.}
     \begin{enumerate}
-        \item \lipsum[2][1]
+        \item \lipsum[1][2]
         \item \lipsum[2][2]
     \end{enumerate}
 \end{enumerate}
 
-\section*{Metodologia}
-\lipsum[1-2]
 
-\section*{Cronograma}
+\section*{Metodologia}
+Para a \textbf{compreensão e manipulação dos objetos matemáticos fundamentais para o desenvolvimento do modelo}, iniciamos com a leitura aprofundada dos artigos-base que introduzem os principais conceitos e motivam o estudo, em especial os trabalhos de \citet{Chekroun2017} e \citet{Chekroun2021}. Em seguida, para consolidar o entendimento do formalismo de Mori-Zwanzig, serão analisadas referências que tratam da formulação e aplicações deste método, incluindo os textos de \citet{Gouasmi2017}, \citet{Chorin2000}, \citet{Chorin2002} e \citet{Chorin2013}.
+
+No \textbf{desenvolvimento de habilidades em ferramentas computacionais}, será utilizada a linguagem Julia \citep{julialang}, com foco na biblioteca \textit{SciML} \citep{SDEJulia}, voltada para simulações com equações diferenciais estocásticas. Para a familiarização inicial, serão feitas simulações com base no exemplo 11.7 de \citep[p.~169]{Pavliotis2008}.
+
+ESCREVER SOBRE O TERCEIRO TÓPICO
+
+\section*{Plano de trabalho}
 \begin{center}
 \renewcommand{\arraystretch}{1.5}
 \begin{tabular}{p{3cm}p{10cm}}
     \toprule
     \textbf{Mês} & \textbf{Atividade} \\
     \midrule
-    Abril   & Definição de tema, orientador e seleção das principais referências.  \\
-    Maio    & Introdução ao formalismo de Mori-Zwanzig; Introdução à linguagem Julia; \\
-    Junho   & \lipsum[3][1] \\
-    Julho   & \lipsum[4][1] \\
-    Agosto  & \lipsum[5][1] \\
-    Setembro& \lipsum[6][1] \\
-    Outubro & Conclusão da monografia \\
-    Novembro & Revisão, tradução e apresentação  \\
+    Abril   & Definição do tema, escolha do orientador e levantamento das principais referências. \\
+    Maio    & Introdução ao formalismo de Mori-Zwanzig e à linguagem Julia. \\
+    Junho   & Primeiras simulações em Julia utilizando modelos simplificados. \\
+    Julho   & Leitura sobre equações diferenciais estocásticas e aprofundamento no Modelo de Lorenz 80. \\
+    Agosto  & Implementação inicial do Modelo de Lorenz 80. \\
+    Setembro& Análise exploratória das propriedades do termo de ruído. \\
+    Outubro & Redação e conclusão da monografia. \\
+    Novembro& Revisão final, tradução e preparação para a apresentação. \\
     \bottomrule
 \end{tabular}
 \end{center}

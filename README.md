@@ -1,20 +1,20 @@
-# Um abordagem estocástica Modelo L80 🔀
+# A stochastic approach L80 model 🔀
 
-## 📝 Descrição
-Este repositório tem o objetivo de organizar todos os arquivos e materiais relacionados ao desenvolvimento do meu Trabalho de Conclusão de Curso (TCC).
+## 📝 Description
+This repository aims to organize all files and materials related to the development of my Undergraduate thesis.
 
-   > 🔍 Aqui serão encontrados documentos, códigos, anotações e quaisquer recursos utilizados durante o projeto.
+> 🔍 Here you will find documents, codes, notes, and any resources used during the project.
 
-## ⚙️ Instalação
-   1. Clone o repositório:
-      ```bash
-      git clone https://github.com/lucasamtaylor01/Lorenz80_SDE.git
-      ```
-   2. Instale as dependências necessárias (se houver).
-   3. Executar o programa principal ou abrir os ficheiros relevantes, conforme necessário.
+## ⚙️ Installation
+1. Clone the repository:
+```bash
+git clone https://github.com/lucasamtaylor01/Lorenz80_SDE.git
+```
+2. Install the necessary dependencies (if any).
+3. Run the main program or open the relevant files as needed.
 
-## 🤝 Contribuição
-As contribuições são bem-vindas! Sinta-se à vontade para abrir um problema ou enviar uma solicitação pull através do GitHub se você tiver sugestões, melhorias ou feedback.
+## 🤝 Contribution
+Contributions are welcome! Feel free to open an issue or submit a pull request via GitHub if you have suggestions, improvements, or feedback.
 
-## 📄 Licença
-Este projeto está atualmente licenciado sob a [MIT License](LICENSE), mas a licença pode mudar no futuro.
+## 📄 License
+This project is currently licensed under the [MIT License](LICENSE), but the license may change in the future.

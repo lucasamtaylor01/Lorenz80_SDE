@@ -1,29 +1,23 @@
 \documentclass[12pt]{article}
 
-% Codificação e Idioma
 \usepackage[utf8]{inputenc}
-\usepackage[portuguese]{babel}
+\usepackage[english]{babel}
 
-% Formatação de Página e Estilo de Texto
 \usepackage[a4paper, margin=2cm]{geometry}
 \usepackage{parskip}
 \linespread{1.5}
 \usepackage{csquotes}
 
-% Links
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
 
-% Matemática
 \usepackage{amsmath, amssymb, amsfonts}
 \usepackage{cancel}
 \usepackage{tikz}
 
-% Bibliografia (ABNT)
-\usepackage[backend=biber, style=abnt, language=portuguese, natbib=true]{biblatex}
-\addbibresource{ref.bib}
+\usepackage[backend=biber, style=apa, natbib=true]{biblatex}
+\addbibresource{references.bib}
 
-% Outros Pacotes
 \usepackage{graphicx}
 \usepackage{ascii}
 \usepackage{listings}
@@ -31,307 +25,308 @@
 \usepackage{url}
 
 
-\title{Introdução ao Formalismo Mori-Zwanzig}
-\date{Abril de 2025}
+\title{Mori-Zwanzig}
+\date{April de 2025}
 
 \author{
-    \textbf{Aluno:} Lucas Amaral Taylor\\
-    \textbf{Orientador:} Prof. Dr. Breno Raphaldini Ferreira da Silva
+    \textbf{Student:} Lucas Amaral Taylor\\
+    \textbf{Supervisor:} Prof. Dr. Breno Raphaldini Ferreira da Silva
 }
 
 \begin{document}
 \maketitle
 
-\section{Introdução}
-O principal objetivo do artigo de \citet{Chekroun2021} é simplificar o modelo de Lorenz 80, preservando seu comportamento. Para isso, utilizaremos o método de Mori-Zwanzig, que é uma abordagem física-estatística aplicável em sistemas como o L80.
+\section{Introduction}
+The main objective of the article by \citet{Chekroun2021} is to simplify the Lorenz 80 model while preserving its behavior. To achieve this, we employ the Mori–Zwanzig method, a statistical-physical approach applicable to systems such as L80.
 
-O método de Mori-Zwanzig, desenvolvido por Robert Walter Zwanzig e Hajime Mori na segunda metade do século XX, é utilizado em sistemas hamiltonianos. Esse método consiste em classificar as variáveis do sistema em duas categorias: ``resolvidas'' e ``não resolvidas''. As variáveis resolvidas são aquelas cujos comportamentos e valores são bem conhecidos, enquanto as não resolvidas são aquelas para as quais não se possui informações diretas. Para substituir essas variáveis não resolvidas, o método introduz termos estocásticos, denominados ruídos (\textit{noise}), além de um termo de amortecimento (\textit{damping}), também conhecido como termo de memória (\textit{memory term}). Essa abordagem permite que o comportamento do sistema de interesse seja preservado de maneira adequada, mesmo sem conhecer completamente as variáveis não resolvidas.
+The Mori–Zwanzig method, developed by Robert Walter Zwanzig and Hajime Mori in the second half of the 20th century, is widely used in Hamiltonian systems. This method classifies the system's variables into two categories: “resolved” and “unresolved.” Resolved variables are those whose behaviors and values are well known, whereas unresolved variables are those for which no direct information is available. To account for the unresolved variables, the method introduces stochastic terms, called noise, together with a damping term, also known as a memory term. This approach enables the behavior of the system of interest to be adequately preserved, even without complete knowledge of the unresolved variables.
 
-Dada a relevância deste método para o trabalho de \citet{Chekroun2021}, optamos por incluir uma introdução ao formalismo de Mori-Zwanzig, a fim de proporcionar uma melhor compreensão de sua aplicação no contexto do modelo de Lorenz 80 e permitir uma base teórica sólida para eventuais explorações.
+Given the relevance of this method to the work of \citet{Chekroun2021}, we chose to include an introduction to the Mori–Zwanzig formalism in order to provide a better understanding of its application in the context of the Lorenz 80 model and to establish a solid theoretical basis for further exploration.
 \newpage
-\section{Motivação}
-Consideremos o exemplo de \citet[p.173]{Chorin2013}: um sistema com duas partículas em uma dimensão espacial, com Hamiltoniano dado por:
+
+\section{Motivation}
+Consider the example from \citet[p.~173]{Chorin2013}: a system with two particles in one spatial dimension, with Hamiltonian given by
 \begin{equation*}
-	H = \frac{1}{2}(q_1^2 + q_2^2 + q_1^2 q_2^2 + p_1^2 + p_2^2)
+	H = \tfrac{1}{2}\,(q_1^2 + q_2^2 + q_1^2 q_2^2 + p_1^2 + p_2^2),
 \end{equation*}
-onde $q_i$ e $p_i$, $i = 1, 2$, representam posições e momentos. Os osciladores harmônicos, uma vez em movimento, oscilam indefinidamente. As equações de movimento são expressas por:
+where $q_i$ and $p_i$, $i = 1, 2$, represent positions and momenta. Once set in motion, harmonic oscillators continue oscillating indefinitely. The equations of motion are expressed as
 \begin{align}
 	\dot{q}_1 & = p_1, \nonumber             \\
 	\dot{p}_1 & = -q_1(1 + q_2^2), \nonumber \\
 	\dot{q}_2 & = p_2, \nonumber             \\
 	\dot{p}_2 & = -q_2(1 + q_1^2).           
-	\label{eq:exemplo-sistema-harmonico}
+	\label{eq:harmonic-system}
 \end{align}
 
-Suponha que os valores iniciais $q_1(0)$ e $p_1(0)$ sejam conhecidos. Assuma que $q_2(0)$ e $p_2(0)$ são amostrados a partir da função densidade de probabilidade:
+Suppose that the initial values $q_1(0)$ and $p_1(0)$ are known, while $q_2(0)$ and $p_2(0)$ are sampled from the probability density function
 \begin{equation*}
-	W = \frac{e^{-H(q,p)}}{Z}   
+	W = \frac{e^{-H(q,p)}}{Z}.
 \end{equation*}
 
-Essa amostragem pode ser realizada, por exemplo, por meio do método de Monte Carlo via cadeia de Markov.
+This sampling can be performed, for example, using the Monte Carlo method via Markov chains.
 
-Dada uma amostra de $q_2(0)$ e $p_2(0)$, o sistema \eqref{eq:exemplo-sistema-harmonico} pode ser resolvido. Contudo, para cada nova amostra de $q_2(0)$ e $p_2(0)$, obtém-se uma trajetória distinta para $q_1(t)$ e $p_1(t)$. Em particular, pode-se querer calcular os valores esperados de $q_1$ e $p_1$ no tempo $t$, dados seus valores iniciais, os quais representam as melhores estimativas de $q_1(t)$ e $p_1(t)$:
+Given a sample of $q_2(0)$ and $p_2(0)$, the system \eqref{eq:harmonic-system} can be solved. However, for each new sample of $q_2(0)$ and $p_2(0)$, a distinct trajectory is obtained for $q_1(t)$ and $p_1(t)$. In particular, one may wish to compute the expected values of $q_1$ and $p_1$ at time $t$, given their initial values, which represent the best estimates of $q_1(t)$ and $p_1(t)$:
 \begin{equation*}
 	\mathbb{E}[q_1(t)\mid q_1(0), p_1(0)], \quad \mathbb{E}[p_1(t)\mid q_1(0), p_1(0)].
 \end{equation*}
 
-Uma vez que $q_2$ e $p_2$ foram amostrados, o sistema completo de quatro equações pode ser resolvido. Isso pode ser feito repetidamente, permitindo calcular a média dos valores de $q_1(t)$ e $p_1(t)$ ao longo de várias execuções.
+Once $q_2$ and $p_2$ have been sampled, the complete system of four equations can be solved. This procedure can be repeated, allowing one to compute the averages of $q_1(t)$ and $p_1(t)$ over several runs.
 
-No entanto, há uma limitação: essa abordagem é adequada apenas para os instantes iniciais do sistema. À medida que o tempo avança, o valor esperado de $q_1(t)$ se distancia do valor real, comprometendo a precisão da aproximação.
-
+However, there is a limitation: this approach is suitable only for the initial instants of the system. As time progresses, the expected value of $q_1(t)$ deviates from the actual value, compromising the accuracy of the approximation.
 \newpage
 
-\section{Prolegômenos}
-\subsection{Escrevendo sistemas de EDO não lineares como sistemas de EDPs lineares}
 
-Considere o sistema de equações diferenciais ordinárias (EDO) dado por:
+\section{Prolegomena}
+\subsection{Writing nonlinear ODEs as systems of linear PDEs}
+
+Consider the ordinary differential equation (ODE) system
 \begin{equation}
 	\frac{d}{dt} \phi(x,t) = R(\phi(x,t)), \quad \phi(x, 0) = x,
-	\label{eq:sistema-edo}
+	\label{eq:ode-system}
 \end{equation}
+where $R$ is a nonlinear function, $\phi$ is a time-dependent function, and $R$, $\phi$, and $x$ may be infinite-dimensional, formed by the vectors $R_i$, $\phi_i$, and $x_i$, respectively.
 
-onde $R$ é uma função não linear, $\phi$ é uma função dependente do tempo, e $R$, $\phi$ e $x$ podem assumir dimensões infinitas, sendo formados pelos vetores $R_i$, $\phi_i$ e $x_i$, respectivamente.
-
-A partir disso, podemos definir o \textit{Operador de Liouville} associado à equação \eqref{eq:sistema-edo} como:
+From this, we define the Liouville operator associated with equation \eqref{eq:ode-system} as
 \begin{equation}
-	L = \sum_i R_i(x) \frac{\partial}{\partial x_i}
+	L = \sum_i R_i(x)\,\frac{\partial}{\partial x_i}.
 	\label{eq:liouville-operator}
 \end{equation}
 
-Utilizando o \textit{Operador de Liouville}, podemos transformar o sistema de EDOs não lineares em um sistema de equações diferenciais parciais (EDPs) lineares da forma:
+Using the Liouville operator, we can transform the nonlinear ODE system into a linear partial differential equation (PDE) system of the form
 \begin{equation}
-	u_t = Lu, \quad u(x,0) = g(x)
-	\label{eq:sistema-edp-linear}
+	u_t = Lu, \quad u(x,0) = g(x).
+	\label{eq:linear-pde-system}
 \end{equation}
 
-A solução desse sistema existe, é única, e é dada por:
+The solution to this system exists, is unique, and is given by
 \begin{equation}
-	u(x,t) = g(\phi(x,t))   
-	\label{eq:solucao-sistema-edp-linear}
+	u(x,t) = g(\phi(x,t)).
+	\label{eq:linear-pde-solution}
 \end{equation}
-Portanto, temos que a equação \eqref{eq:sistema-edp-linear} é bem definida\footnote{Detalhes da demonstração podem ser encontrados em \citet[p.~181-182]{Chorin2013}}.
+Therefore, equation \eqref{eq:linear-pde-system} is well defined.\footnote{Details of the proof can be found in \citet[p.~181--182]{Chorin2013}.}
 
-\subsection{Notação de semigrupo}
-\subsection{Definição de semigrupo}
-Tomemos $X$ um conjunto não vazio, dotado de uma operação binária $ * $, ou seja, $ X \times X \to X $, que satisfaz a propriedade de associatividade:
+
+\subsection{Semigroup definition}
+Let $X$ be a non-empty set equipped with a binary operation $*$, that is, $X \times X \to X$, which satisfies the associativity property:
 \begin{equation*}
 	(a * b) * c = a * (b * c), \quad \forall a,b,c \in X.
 \end{equation*}
 
-\subsubsection{Introdução à notação}
-A notação de semigrupo oferece uma forma compacta e eficiente de representar soluções para equações diferenciais, particularmente as parciais ou de evolução.
+\subsection{Introduction to notation}
+Semigroup notation offers a compact and efficient way to represent solutions to differential equations, particularly partial differential or evolution equations.
 
-Considere o operador $\Delta$ definido por:
+Consider the operator $\Delta$ defined by
 \begin{equation*}
-	\Delta \psi = \psi_{xx}, \quad \text{onde $\psi$ é uma função suave}.
+	\Delta \psi = \psi_{xx}, \quad \text{where $\psi$ is a smooth function}.
 \end{equation*}
-Agora, considere a equação diferencial:
+Now, consider the differential equation
 \begin{equation*}
 	\frac{dv}{dt} - kv = 0, \quad v(0) = v_0,
 \end{equation*}
-cuja solução é bem conhecida: $ v(t) = v_0 e^{kt} $.
+whose solution is well known: $v(t) = v_0 e^{kt}$.
 
-De forma análoga, considere a equação do calor:
+Similarly, consider the heat equation
 \begin{equation*}
-	v_t - \frac{1}{2} \Delta v = 0, \quad v(x, 0) = \phi(x),
+	v_t - \tfrac{1}{2}\Delta v = 0, \quad v(x, 0) = \phi(x),
 \end{equation*}
-onde $v_t$ é a derivada de $v$ em relação ao tempo e $\phi(x)$ é a condição inicial. Em vez de resolver diretamente, expressamos a solução utilizando a notação de semigrupo:
+where $v_t$ is the derivative of $v$ with respect to time and $\phi(x)$ is the initial condition. Rather than solving directly, we express the solution using semigroup notation:
 \begin{equation*}
-	v(t) = e^{\frac{1}{2}t \Delta} \phi.
+	v(t) = e^{\tfrac{1}{2}t \Delta} \phi.
 \end{equation*}
-Aqui, $\mathbb{E}^{\frac{1}{2}t \Delta}$ é um operador semigrupo gerado pela operação de difusão (pelo operador $\Delta$). Ele é aplicado à condição inicial $\phi(x)$, e a solução $v(t)$ descreve a evolução temporal de $v(x,t)$ ao longo do tempo $t$. Essa notação permite representar soluções de equações diferenciais de maneira compacta, explorando a estrutura associativa da operação de semigrupo. Especificamente, ela satisfaz a propriedade de composição:
+Here, $e^{\tfrac{1}{2}t \Delta}$ is a semigroup operator generated by the diffusion operator $\Delta$. It acts on the initial condition $\phi(x)$, and the solution $v(t)$ describes the temporal evolution of $v(x,t)$ over time $t$. This notation allows us to represent solutions to differential equations in a compact form, exploiting the associative structure of the semigroup operation. Specifically, it satisfies the composition property:
 \begin{equation*}
-	e^{\frac{1}{2}(t+s)\Delta} = e^{\frac{1}{2}t \Delta} e^{\frac{1}{2}s \Delta}.
+	e^{\tfrac{1}{2}(t+s)\Delta} = e^{\tfrac{1}{2}t \Delta} e^{\tfrac{1}{2}s \Delta}.
 \end{equation*}
 
-\subsection{Aplicação da notação}
-Dada a notação de semigrupo apresentada anteriormente, aplicamos esta notação à equação \eqref{eq:solucao-sistema-edp-linear}:
+
+\subsection{Application of notation}
+Given the semigroup notation presented above, we apply it to equation \eqref{eq:linear-pde-solution}:
 \begin{equation}
-	e^{tL}g(x) = g(\phi(x,t))
-	\label{eq:solucao-sistema-edp-linear-semigrupo}
+	e^{tL} g(x) = g(\phi(x,t)),
+	\label{eq:linear-pde-solution-semigroup}
 \end{equation}
 
-Note que $\mathbb{E}^{tL}x$ não representa uma avaliação direta de $\mathbb{E}^{tL}$, mas sim a ação do operador $\mathbb{E}^{tL}$ sobre o vetor formado pelos componentes $x_i$. Além disso, a função $g$ comuta com a variação temporal das condições iniciais de $x_i$. 
+Note that $e^{tL}x$ does not represent a direct evaluation of $e^{tL}$, but rather the action of the operator $e^{tL}$ on the vector formed by the components $x_i$. Furthermore, the function $g$ commutes with the time evolution of the initial conditions of $x_i$.
 
-Vale destacar que $g$ é uma função independente do tempo em relação às variáveis que descrevem o sistema físico, e sua variação ocorre exclusivamente devido à mudança dessas variáveis ao longo do tempo. Assim, a equação \eqref{eq:sistema-edp-linear} pode ser expressa como:
+It is worth noting that $g$ is a function independent of time with respect to the variables that describe the physical system, and its variation occurs exclusively due to changes in these variables over time. Thus, equation \eqref{eq:linear-pde-system} can be expressed as
 \begin{equation}
-	Le^{tL} = e^{tL}L
+	L e^{tL} = e^{tL} L.
 \end{equation}
 
-Essa mesma relação se aplica a matrizes: sejam $A$ e $B$ duas matrizes, então a seguinte identidade é válida:
+An analogous relation holds for matrices: let $A$ and $B$ be two matrices. Then the following identity holds:
 \begin{equation}
-	\exp(t(A+B)) = \exp(tA) + \int_0^t \exp\left((t-s)(A+B)\right)B\exp(sA) \, ds
-	\label{eq:formula-de-duhamel}
+	\exp(t(A+B)) = \exp(tA) + \int_0^t \exp\!\left((t-s)(A+B)\right) B \exp(sA)\, ds,
+	\label{eq:duhamel-formula}
 \end{equation}
+This equation, known as the Duhamel formula or Dyson formula, is well defined.
 
-Esta equação, conhecida como \textit{Fórmula de Duhamel} ou \textit{fórmula de Dyson}, é bem definida.
+\subsection{Hermite polynomials}
 
-\subsection{Polinômios Hermitianos}
-
-Primeiramente, definimos o produto interno como:
+First, we define the inner product as
 \begin{equation}
-	\langle u, v \rangle = \int_{-\infty}^{+\infty} \frac{e^{-x^2/2}}{\sqrt{2 \pi}} u(x) v(x) \, dx
-	\label{eq:produto-interno-hermitiano-unidimensional}
+	\langle u, v \rangle = \int_{-\infty}^{+\infty} \frac{e^{-x^2/2}}{\sqrt{2 \pi}} \, u(x) v(x) \, dx,
+	\label{eq:hermitian-inner-product-1d}
 \end{equation}
-
-Os polinômios $p_n(x)$ e $p_m(x)$ são ortonormais em relação a esse produto interno \eqref{eq:produto-interno-hermitiano-unidimensional} quando satisfazem a seguinte condição:
+The polynomials $p_n(x)$ and $p_m(x)$ are orthonormal with respect to this inner product \eqref{eq:hermitian-inner-product-1d} when they satisfy
 \begin{equation*}
 	\langle p_n, p_m \rangle = \int_{-\infty}^{\infty} e^{-x^2/2} p_n(x) p_m(x) \, dx = \delta_{nm},
 \end{equation*}
-em que $\delta_{nm}$ é o delta de Kronecker, que apresenta as propriedades:
+where $\delta_{nm}$ is the Kronecker delta, which has the following properties:
 
 \begin{enumerate}
-	\item \textbf{Ortogonalidade}: Para $n \neq m$, os polinômios são ortogonais, ou seja, o produto interno entre eles é nulo:
+	\item \textbf{Orthogonality}: For $n \neq m$, the polynomials are orthogonal, i.e., the inner product between them is zero:
 	      \begin{equation*}
-	      	\langle p_n, p_m \rangle = 0 \quad \text{quando} \quad n \neq m
+	      	\langle p_n, p_m \rangle = 0 \quad \text{when} \quad n \neq m.
 	      \end{equation*}
-	      	          
-	\item \textbf{Normalização}: Para $n = m$, os polinômios são normalizados, de modo que o produto interno é igual a 1:
+	                    
+	\item \textbf{Normalization}: For $n = m$, the polynomials are normalized, so that the inner product equals 1:
 	      \begin{equation*}
-	      	\langle p_n, p_n \rangle = 1
+	      	\langle p_n, p_n \rangle = 1.
 	      \end{equation*}
 \end{enumerate}
 
-No caso $n$-dimensional, o produto interno se generaliza para:
+In the $n$-dimensional case, the inner product generalizes to
 \begin{equation*}
-	\langle u, v \rangle = \int_{-\infty}^{+\infty} \cdots \int_{-\infty}^{+\infty} (2 \pi)^{-n/2} \exp \left(-\sum_{i=1}^n \frac{x_i^2}{2} \right) u(x) v(x) \, dx_1 \ldots dx_n
+	\langle u, v \rangle = \int_{-\infty}^{+\infty} \cdots \int_{-\infty}^{+\infty} (2 \pi)^{-n/2} 
+	\exp \!\left(-\sum_{i=1}^n \frac{x_i^2}{2} \right) u(x) v(x) \, dx_1 \cdots dx_n.
 \end{equation*}
 
-De forma mais geral, se $H(q, p)$ é um Hamiltoniano, é possível definir uma família de polinômios nas variáveis $q$ e $p$ que sejam ortonormais com respeito à densidade canônica $Z^{-1} e^{-H/T}$. Os polinômios que satisfazem essa condição ainda são chamados de \textit{polinômios hermitianos}.
+More generally, if $H(q, p)$ is a Hamiltonian, it is possible to define a family of polynomials in the variables $q$ and $p$ that are orthonormal with respect to the canonical distribution $Z^{-1} e^{-H/T}$. Polynomials that satisfy this condition are called \textit{Hermite polynomials}.
 
-Por fim, para o formalismo de Mori-Zwanzig, consideraremos um espaço $n$-dimensional $\Gamma$ com uma densidade de probabilidade dada. Dividiremos as coordenadas em dois tipos: $\hat{x}$ e $\tilde{x}$. Seja $g$ uma função de $x$; então $\mathbb{P}g = \mathbb{E}[g \mid \hat{x}]$ é uma projeção ortogonal sobre o subespaço das funções de $\hat{x}$.Temos que essa projeção gera um subespaço de polinômios hermitianos que são funções de $\hat{x}$ e projetando sobre esses polinômios.
+Finally, for the Mori–Zwanzig formalism, we consider an $n$-dimensional space $\Gamma$ with a given probability density. We divide the coordinates into two types: $\hat{x}$ and $\tilde{x}$. Let $g$ be a function of $x$; then $\mathcal{P}g = \mathbb{E}[g \mid \hat{x}]$ is the orthogonal projection onto the subspace of functions of $\hat{x}$. This projection generates a subspace of Hermite polynomials that depend only on $\hat{x}$, and the operator $\mathcal{P}$ acts by projecting functions onto this subspace.
 
 \newpage
 \section{Mori-Zwanzig}
-\subsection{Construção}
-Tomemos novamente o sistema \eqref{eq:sistema-edo}, reproduzido abaixo:
+\subsection{Construction}
+Let us take another look at the system \eqref{eq:ode-system}, reproduced below:
 \begin{equation*}
 	\frac{d}{dt} \phi(x,t) = R(\phi(x,t)), \quad \phi(x, 0) = x,
 \end{equation*}
 
-Lembremos que a equação é composta por componentes de dimensão $n$. Dentre essas $n$ componentes, definimos as primeiras $m$ componentes de $\phi$, com $m < n$, como as variáveis de interesse. Em seguida, classificamos $\hat{\phi}$ como as variáveis ``resolvidas'' e $\tilde{\phi}$ como as variáveis ``não resolvidas'':
+Recall that the equation consists of $n$ components. Among these $n$ components, we define the first $m$ components of $\phi$, with $m < n$, as the variables of interest. We then classify $\hat{\phi}$ as the ``resolved'' variables and $\tilde{\phi}$ as the ``unresolved'' variables:
 \begin{equation*}
-	\phi = (\hat{\phi}, \tilde{\phi}), \quad \hat{\phi} = \left(\phi_1, \ldots, \phi_m \right), \quad \tilde{\phi} = \left(\phi_{m+1}, \ldots, \phi_n\right)
+	\phi = (\hat{\phi}, \tilde{\phi}), \quad \hat{\phi} = \left(\phi_1, \ldots, \phi_m \right), \quad \tilde{\phi} = \left(\phi_{m+1}, \ldots, \phi_n\right).
 \end{equation*}
-O mesmo vale para $x$ e $R$: $x = (\hat{x}, \tilde{x})$ e $R = (\hat{R}, \tilde{R})$. A partir das variáveis resolvidas, buscamos criar predições para o modelo de interesse, utilizando as soluções de uma parte da equação.
+The same applies to $x$ and $R$: $x = (\hat{x}, \tilde{x})$ and $R = (\hat{R}, \tilde{R})$. From the resolved variables, we seek to create predictions for the model of interest, using the solutions from one part of the equation.
 
-Com base no \textit{Operador de Liouville} e na \textit{notação de semigrupo}, podemos reescrever as componentes de $\hat{\phi}$ como\footnote{Note que cada componente depende de \textbf{todos} os valores de $x$. Portanto, se $\tilde{x}$ for aleatório, então $\hat{\phi}$ também será.}:
+Based on the Liouville operator and semigroup notation, we can rewrite the components of $\hat{\phi}$ as\footnote{Note that each component depends on all values of $x$. Therefore, if $\tilde{x}$ is random, then $\hat{\phi}$ will also be random.}:
 \begin{equation*}
-	\hat{\phi}_j(x,t) = e^{tL}x_j, \quad 1 \leq j \leq m
+	\hat{\phi}_j(x,t) = e^{tL}x_j, \quad 1 \leq j \leq m.
 \end{equation*}
-Ainda na notação de semigrupo, a equação dessas componentes é dada por:
+Still in semigroup notation, the equation for these components is given by:
 \begin{equation}
-	\frac{\partial}{\partial t}e^{tL}x_j = Le^{tL}x_j = e^{tL}Lx
-	\label{eq:mori-zwanzig-notacao-semigrupo}
+	\frac{\partial}{\partial t}e^{tL}x_j = Le^{tL}x_j = e^{tL}Lx_j,
+	\label{eq:mori-zwanzig-semigroup}
 \end{equation}
 
-A partir da \textit{projeção ortogonal} introduzida na seção anterior, definimos $\mathbb{P}$ como a projeção dada por: $\mathbb{P}g(x) = \mathbb{E}[g|\hat{x}]$. Assumimos que, no instante $t = 0$, conhecemos a densidade conjunta de todas as variáveis $x$, mas apenas os dados iniciais $\hat{x}$ são conhecidos. A densidade das variáveis em $\tilde{x}$ é, então, a densidade conjunta de todas as variáveis $x$ com $\hat{x}$ fixado. Assim, $\mathbb{P}$ é uma projeção sobre um espaço de funções com variáveis fixas e, portanto, independente do tempo.
+From the orthogonal projection introduced in the previous section, we define $\mathcal{P}$ as the projection given by $\mathcal{P}g(x) = \mathbb{E}[g \mid \hat{x}]$. We assume that, at time $t = 0$, we know the joint density of all variables $x$, but only the initial data $\hat{x}$ are known. The density of the variables in $\tilde{x}$ is then the joint density of all variables $x$ with $\hat{x}$ fixed. Thus, $\mathcal{P}$ is a projection onto a space of functions with fixed variables and is therefore independent of time.
 
-As projeções $\mathbb{P}\hat{\phi}(t) = \mathbb{E}[\hat{\phi}(t) | \hat{x}]$ são de nosso maior interesse, pois estimam o comportamento do sistema a partir de um conjunto reduzido de variáveis.
+The projections $\mathcal{P}\hat{\phi}(t) = \mathbb{E}[\hat{\phi}(t) \mid \hat{x}]$ are of greatest interest to us, as they estimate the behavior of the system from a reduced set of variables.
 
-Definindo $\mathbb{Q} = I - \mathbb{P}$ e considerando que as seguintes propriedades são válidas para quaisquer projeções ortogonais:
+Defining $\mathcal{Q} = I - \mathcal{P}$ and considering that the following properties hold for any orthogonal projections:
 \begin{enumerate}
-	\item $\mathbb{P}^2 = \mathbb{P}$;
-	\item $\mathbb{Q}^2 = \mathbb{Q}$;
-	\item $\mathbb{P}\mathbb{Q} = 0$.
+	\item $\mathcal{P}^2 = \mathcal{P}$;
+	\item $\mathcal{Q}^2 = \mathcal{Q}$;
+	\item $\mathcal{P}\mathcal{Q} = 0$.
 \end{enumerate}
 
-Podemos reescrever a equação \eqref{eq:mori-zwanzig-notacao-semigrupo} como:
+We can then rewrite equation \eqref{eq:mori-zwanzig-semigroup} as:
 \begin{equation}
-	\frac{\partial }{\partial t}e^{tL}x_j = e^{tL}\mathbb{P}Lx_j + e^{tL}\mathbb{Q}Lx_j
-	\label{eq:mori-zwanzig-pre-mz}
+	\frac{\partial }{\partial t}e^{tL}x_j = e^{tL}\mathcal{P}Lx_j + e^{tL}\mathcal{Q}Lx_j,
+	\label{eq:mori-zwanzig-pre}
 \end{equation}
 
-Utilizando agora a \textit{fórmula de Dyson}, com $A = \mathbb{Q}L$ e $B = \mathbb{Q}L$, obtemos:
+Now, using the Dyson formula with $A = \mathcal{Q}L$ and $B = \mathcal{P}L$, we obtain:
 \begin{equation}
-	e^{tL} = e^{t\mathbb{Q}L} + \int_0^t e^{(t-s)L} \mathbb{P}L e^{s\mathbb{Q}L} \, ds
-	\label{eq:mori-zwanzig-dyson-mz}
+	e^{tL} = e^{t\mathcal{Q}L} + \int_0^t e^{(t-s)L} \mathcal{P}L \, e^{s\mathcal{Q}L} \, ds,
+	\label{eq:mori-zwanzig-dyson}
 \end{equation}
 
-Pela linearidade da equação de Liouville e a partir das equações \eqref{eq:mori-zwanzig-pre-mz} e \eqref{eq:mori-zwanzig-dyson-mz}, obtemos:
+Due to the linearity of the Liouville equation and based on equations \eqref{eq:mori-zwanzig-pre} and \eqref{eq:mori-zwanzig-dyson}, we obtain:
 \begin{equation}
-	\frac{\partial}{\partial t} e^{tL} x_j = e^{tL} \mathbb{P}L x_j + e^{t\mathbb{Q}L} \mathbb{Q}L x_j + \int_0^t e^{(t-s)L} \mathbb{P}L e^{s\mathbb{Q}L} \mathbb{Q}L x_j \, ds
+	\frac{\partial}{\partial t} e^{tL} x_j = e^{tL} \mathcal{P}L x_j + e^{t\mathcal{Q}L} \mathcal{Q}L x_j + \int_0^t e^{(t-s)L} \mathcal{P}L e^{s\mathcal{Q}L} \mathcal{Q}L x_j \, ds,
 	\label{eq:mori-zwanzig}
 \end{equation}
+which is the Mori–Zwanzig equation.
 
-A equação acima expressa a \textit{equação de Mori-Zwanzig}.
 
-\subsection{Análise termo a termo}
-\subsubsection{Primeiro termo}
-O primeiro termo é dado por:  
+\subsection{Term-by-term analysis}
+\subsubsection{First term}
+The first term is given by
 \begin{equation}
-	e^{tL} \mathbb{P}L x_j
-	\label{eq:primeiro-termo-mz}
+	e^{tL} \mathcal{P}L x_j,
+	\label{eq:first-term-mz}
 \end{equation}
 
-Observe que:  
+Observe that
 \begin{equation*}
-	Lx_j = \sum_i R_i\left(\frac{\partial}{\partial x_i}\right)x_j = R_j(x)
+	Lx_j = \sum_i R_i\left(\frac{\partial}{\partial x_i}\right)x_j = R_j(x).
 \end{equation*}
 
-Portanto,  
+Therefore,
 \begin{equation*}
-	\mathbb{P}Lx_j = \mathbb{E}[R_j(x)\,|\,\hat{x}] \quad \text{Note que esta é uma função exclusivamente de $\hat{x}$.}
+	\mathcal{P}Lx_j = \mathbb{E}[R_j(x)\mid \hat{x}], \quad \text{which is a function depending only on $\hat{x}$}.
 \end{equation*}
 
-Com isso, podemos concluir que:  
+From this, we can conclude that
 \begin{equation*}
-	e^{tL}\mathbb{P}Lx_j = \bar{R}_j\left(\hat{\phi}(x,t)\right)
+	e^{tL}\mathcal{P}Lx_j = \bar{R}_j\big(\hat{\phi}(x,t)\big).
 \end{equation*}
 
-Mais do que isso: o primeiro termo representa a dinâmica própria do sistema nas variáveis resolvidas. Além disso, trata-se de um termo markoviano, pois depende apenas do estado atual do sistema no tempo $t$.
+Moreover, the first term represents the system's intrinsic dynamics in the resolved variables. It is also a Markovian term, as it depends only on the current state of the system at time $t$.
 
-\subsubsection{Segundo termo}
-Para o segundo termo, definimos:
+\subsubsection{Second term}
+For the second term, we define
 \begin{equation*}
-	w_j = e^{t\mathbb{Q}L} \mathbb{Q}L x_j
+	w_j = e^{t\mathcal{Q}L} \mathcal{Q}L x_j.
 \end{equation*}
 
-Por definição, temos:
+By definition, we have
 \begin{align}
-	\frac{\partial}{\partial t} w_j(x,t) & = \mathbb{Q}L w_j(x,t),\\
-	w_j(x,0)                             & = \mathbb{Q}L x_j = (I - \mathbb{P})R_j(x) = R_j(x) - \mathbb{E}[R_j \mid \hat{x}]. 
-    \label{eq:mori-zwanzig-dinamica-ortogonal}
+	\frac{\partial}{\partial t} w_j(x,t) & = \mathcal{Q}L w_j(x,t),                                                                 \\
+	w_j(x,0)                             & = \mathcal{Q}L x_j = (I - \mathcal{P})R_j(x) = R_j(x) - \mathbb{E}[R_j(x) \mid \hat{x}]. 
+	\label{eq:mz-orthogonal-dynamics}
 \end{align}
 
-Note que $w_j(x,0) = \mathbb{Q}Lx_j = R_j(x) - \mathbb{E}[R_j(x) \mid \hat{x}]$ representa a \textit{parte flutuante} da variável $R_j(x)$, ou seja, o componente imprevisível dado $\hat{x}$. Essa parte evolui de acordo com as \textit{dinâmicas ortogonais}, de modo que $\mathbb{P} w_j(x,t) = 0$ para todo $t$, mantendo o termo como um ruído puramente não resolvido ao longo do tempo.
+Note that $w_j(x,0) = \mathcal{Q}Lx_j = R_j(x) - \mathbb{E}[R_j(x) \mid \hat{x}]$ represents the \textit{fluctuating part} of the variable $R_j(x)$, that is, the unpredictable component given $\hat{x}$. This part evolves according to the \textit{orthogonal dynamics}, so that $\mathcal{P}w_j(x,t) = 0$ for all $t$, keeping the term as purely unresolved noise over time.
 
-Mais especificamente, o subespaço do ruído (\textit{noise subspace}) é formado pelas componentes das funções que são ortogonais às funções de $\hat{x}$, geralmente, isso corresponde a termos que dependem de $\tilde{x}$. 
+More specifically, the noise subspace is formed by the components of functions that are orthogonal to the functions of $\hat{x}$, typically corresponding to terms that depend on $\tilde{x}$.
 
-\subsubsection{Terceiro termo}
-O terceiro termo, dado por:
+\subsubsection{Third term}
+The third term,
 \begin{equation*}
-	\int_0^t e^{(t-s)L} \mathbb{P}L e^{s\mathbb{Q}L} \mathbb{Q}L x_j
+	\int_0^t e^{(t-s)L} \mathcal{P}L e^{s\mathcal{Q}L} \mathcal{Q}L x_j,
 \end{equation*}
-é classificado como o termo de memória  (\textit{memory term}), já que este envolve a integração de quantidades que dependem de estados anteriores ao atual.
+is classified as a memory term, since it involves the integration of quantities that depend on past states of the system.
 
-Tomemos que $\mathbb{P}$ seja projete na extensão dos polinômios hermitianos $H-1, H_2, \ldots$ com argumentos em $\hat{x}$. Assim, para dada função $\psi$, temos que: $\mathbb{P}\psi = \sum (\psi, H_k)H_k$, assim, temos:
+Let $\mathcal{P}$ be the projection onto the span of Hermite polynomials $H_1, H_2, \ldots$ with arguments in $\hat{x}$. For a given function $\psi$, we have $\mathcal{P}\psi = \sum (\psi,H_k)H_k$, and thus
 \begin{align*}
-	\mathbb{P}Le^{s\mathbb{Q}L} \mathbb{Q}Lx_j & = \mathbb{P}L(\mathbb{P} + \mathbb{Q})e^{s\mathbb{Q}L} \mathbb{Q}Lx_j                           \\
-	                                           & = \mathbb{P}L\mathbb{Q}e^{s\mathbb{Q}L} \mathbb{Q}Lx_j                                          \\
-	                                           & = \sum_k \langle L\mathbb{Q}e^{s\mathbb{Q}L} \mathbb{Q}Lx_j, H_k(\hat{x}) \rangle H_k(\hat{x}). 
+	\mathcal{P}Le^{s\mathcal{Q}L}\mathcal{Q}Lx_j 
+	  & = \mathcal{P}L(\mathcal{P}+\mathcal{Q})e^{s\mathcal{Q}L}\mathcal{Q}Lx_j                           \\
+	  & = \mathcal{P}L\mathcal{Q}e^{s\mathcal{Q}L}\mathcal{Q}Lx_j                                         \\
+	  & = \sum_k \langle L\mathcal{Q}e^{s\mathcal{Q}L}\mathcal{Q}Lx_j, H_k(\hat{x}) \rangle H_k(\hat{x}). 
 \end{align*}
 
-O produto interno é definido como um valor esperado com respeito à densidade de probabilidade inicial. Vamos assumir que $L$ é antissimétrico, ou seja, $(u, Lv) = -(Lu, v)$, então:
+The inner product is defined as an expectation with respect to the initial probability density. Assuming that $L$ is antisymmetric, i.e., $(u,Lv) = -(Lu,v)$, we obtain
 \begin{align*}
-	(L Q e^{s Q L} Q L x_j, H_k(\hat{x})) 
-	  & = - (Q e^{s Q L} Q L x_j, L H_k)  \\
-	  & = - (e^{s Q L} Q L x_j, Q L H_k). 
+	(L \mathcal{Q} e^{s \mathcal{Q} L} \mathcal{Q} L x_j, H_k(\hat{x})) 
+	  & = - (\mathcal{Q} e^{s \mathcal{Q} L} \mathcal{Q} L x_j, L H_k)  \\
+	  & = - (e^{s \mathcal{Q} L} \mathcal{Q} L x_j, \mathcal{Q} L H_k). 
 \end{align*}
 
-Tanto $Q L x_j$ quanto $Q L H_k$ estão no subespaço de ruído, e $\mathbb{E}^{s Q L} Q L x_j$ é uma solução no tempo $s$ da equação de dinâmica ortogonal com dados no subespaço de ruído; $P L e^{s Q L} Q L x_j$ é então uma \textbf{soma de covariâncias temporais de ruídos}.
+Both $\mathcal{Q}Lx_j$ and $\mathcal{Q}L H_k$ belong to the noise subspace, and $e^{s \mathcal{Q} L}\mathcal{Q}Lx_j$ is a solution at time $s$ of the orthogonal dynamics equation with data in the noise subspace. Hence, $\mathcal{P}Le^{s \mathcal{Q} L}\mathcal{Q}Lx_j$ is a \textbf{sum of temporal covariances of noise}.
 
 \newpage
 
-\section{Voltando à motivação}
+\section{Returning to the motivation}
 
-\subsection{Introdução}
-Inicialmente, vamos relembrar o problema em questão: temos um sistema hamiltoniano, com o hamiltoniano definido por  
+\subsection{Introduction}
+First, let us recall the problem at hand: we have a Hamiltonian system, with the Hamiltonian defined by
 \begin{equation*}
-	H = \frac{1}{2}(q_1^2 + q_2^2 + q_1^2 q_2^2 + p_1^2 + p_2^2).
+	H = \tfrac{1}{2}\,(q_1^2 + q_2^2 + q_1^2 q_2^2 + p_1^2 + p_2^2).
 \end{equation*}
 
-As equações do movimento associadas são dadas por:  
+The associated equations of motion are
 \begin{align*}
 	\dot{q}_1 & = p_1, \nonumber             \\
 	\dot{p}_1 & = -q_1(1 + q_2^2), \nonumber \\
@@ -339,101 +334,109 @@ As equações do movimento associadas são dadas por:
 	\dot{p}_2 & = -q_2(1 + q_1^2).           
 \end{align*}
 
-Aplicando o \textit{Operador de Liouville}, obtemos:  
+Applying the Liouville operator, we obtain
 \begin{equation*}
-	L = p_1 \frac{\partial}{\partial q_1} - q_1(1 + q_2^2)\frac{\partial}{\partial p_1}
-	+ p_2 \frac{\partial}{\partial q_2} - q_2(1 + q_1^2)\frac{\partial}{\partial p_2}.
+	L = p_1 \frac{\partial}{\partial q_1} 
+	- q_1(1 + q_2^2)\frac{\partial}{\partial p_1}
+	+ p_2 \frac{\partial}{\partial q_2} 
+	- q_2(1 + q_1^2)\frac{\partial}{\partial p_2}.
 \end{equation*}
 
-Como antes, assumimos que os valores iniciais $q_1(0)$ e $p_1(0)$ são conhecidos, enquanto $q_2$ e $p_2$ são definidos por uma função densidade de probabilidade dada por:
+As before, we assume that the initial values $q_1(0)$ and $p_1(0)$ are known, while $q_2$ and $p_2$ are distributed according to a probability density function given by
 \begin{equation*}
-	W(x) = \exp\left(\frac{-H(q_1,p_1,q_2,p_2)}{Z}\right) \quad \text{(uma densidade canônica com temperatura $T = 1$).}
+	W(x) = \frac{1}{Z}\,\exp\!\big(-H(q_1,p_1,q_2,p_2)\big).
 \end{equation*}
 
-Nosso objetivo é avaliar $q_1(t)$ e $p_1(t)$ a partir das equações de Mori-Zwanzig \eqref{eq:mori-zwanzig}.
+Our goal is to evaluate $q_1(t)$ and $p_1(t)$ using the Mori–Zwanzig equations \eqref{eq:mori-zwanzig}.
 
-\subsection{Primeira aproximação}
-Dada a natureza do sistema, é necessário realizar uma aproximação para introduzir o termo de memória. Sabemos que as dinâmicas ortogonais descritas em \eqref{eq:mori-zwanzig-dinamica-ortogonal} são aproximadamente equivalentes às dinâmicas completas, uma vez que não são sensíveis às variáveis resolvidas. Com base nisso, a aproximação consiste em substituir $e^{t\mathbb{Q}L}$ por $e^{tL}$ no termo de memória. Essa substituição é válida quando a influência das variáveis resolvidas sobre as não resolvidas é pequena\footnote{Essa substituição é justificada quando o acoplamento entre as variáveis resolvidas e não resolvidas é fraco.}. 
 
-Dito isso, podemos iniciar a manipulação algébrica. Um operador comuta com qualquer função de si mesmo, de modo que:
-\begin{equation*}
-	\mathbb{Q}Le^{s\mathbb{Q}L} = e^{s\mathbb{Q}L} \mathbb{Q}L.
-\end{equation*}
-Usando essa identidade e substituindo $e^{s\mathbb{Q}L} \to e^{sL}$ no lado direito da igualdade, obtemos:
-\begin{equation*}
-	\mathbb{P}Le^{s\mathbb{Q}L} \approx Le^{sL} - e^{sL} \mathbb{Q}L.
-\end{equation*}
-Então,
-\begin{equation*}
-	e^{(t-s)L} \mathbb{P}Le^{s\mathbb{Q}L} \approx e^{(t-s)L} Le^{sL} - e^{(t-s)L} e^{sL} \mathbb{Q}L = e^{tL} \mathbb{P}L,
-\end{equation*}
-o que torna o integrando no termo integral da equação de Mori-Zwanzig independente de $s$, resultando em:
-\begin{equation*}
-	\int_0^t e^{tL} \mathbb{P}L \mathbb{Q}L x_j \, ds = t e^{tL} \mathbb{P}L \mathbb{Q}L x_j,
-\end{equation*}
-onde $\hat{x}$ é o vetor com componentes $x_1 = q_1$ e $x_2 = p_1$. O termo de memória foi assim reduzido a um operador diferencial multiplicado pelo tempo $t$. Note que $t = 0$ corresponde ao instante em que os valores iniciais de $q_1(t)$ e $p_1(t)$ são atribuídos, ou seja, quando não há incerteza. Essa aproximação também pode ser justificada assumindo que o integrando no termo de memória é aproximadamente constante em $s$, e portanto pode ser avaliado em $s = 0$.
+\subsection{First approximation}
+Given the nature of the system, it is necessary to make an approximation to introduce the memory term. We know that the orthogonal dynamics described in \eqref{eq:mz-orthogonal-dynamics} are approximately equivalent to the complete dynamics, since they are not sensitive to the resolved variables. Based on this, the approximation consists of replacing $e^{t\mathcal{Q}L}$ with $e^{tL}$ in the memory term. This substitution is valid when the influence of the resolved variables on the unresolved ones is small.\footnote{This substitution is justified when the coupling between the resolved and unresolved variables is weak.} 
 
-As equações com o termo integral simplificado constituem o chamado modelo-$t$. Reunindo os termos, temos:
+That said, we can begin the algebraic manipulation. An operator commutes with any function of itself, so that
 \begin{equation*}
-	\frac{d}{dt} e^{tL} \hat{x} = e^{tL} \mathbb{P}L \hat{x} + t e^{tL} \mathbb{P}L \mathbb{Q}L \hat{x} + e^{tL} \mathbb{Q}L \mathbb{Q}L x_j.
+	\mathcal{Q}L e^{s\mathcal{Q}L} = e^{s\mathcal{Q}L} \mathcal{Q}L.
+\end{equation*}
+Using this identity and substituting $e^{s\mathcal{Q}L} \to e^{sL}$ on the right-hand side, we obtain
+\begin{equation*}
+	\mathcal{P}L e^{s\mathcal{Q}L} \approx Le^{sL} - e^{sL}\mathcal{Q}L.
+\end{equation*}
+Hence,
+\begin{equation*}
+	e^{(t-s)L} \mathcal{P}L e^{s\mathcal{Q}L} \approx e^{(t-s)L}Le^{sL} - e^{(t-s)L} e^{sL}\mathcal{Q}L = e^{tL}\mathcal{P}L,
+\end{equation*}
+which makes the integrand in the memory term of the Mori–Zwanzig equation independent of $s$, resulting in
+\begin{equation*}
+	\int_0^t e^{tL}\mathcal{P}L\mathcal{Q}L x_j \, ds = t e^{tL}\mathcal{P}L\mathcal{Q}L x_j,
+\end{equation*}
+where $\hat{x}$ is the vector with components $x_1 = q_1$ and $x_2 = p_1$. The memory term is thus reduced to a differential operator multiplied by time $t$. Note that $t=0$ corresponds to the instant when the initial values of $q_1(t)$ and $p_1(t)$ are assigned, i.e., when there is no uncertainty. This approximation can also be justified by assuming that the integrand in the memory term is approximately constant in $s$, and therefore can be evaluated at $s=0$.
+
+The equations with the simplified integral term constitute the so-called $t$-model. Combining the terms, we have
+\begin{equation*}
+	\frac{d}{dt} e^{tL} \hat{x} = e^{tL}\mathcal{P}L \hat{x} + t e^{tL}\mathcal{P}L\mathcal{Q}L \hat{x} + e^{tL}\mathcal{Q}L\mathcal{Q}L x_j.
 \end{equation*}
 
-No caso particular considerado, com os componentes $x_j = q_1$ e $x_j = p_1$, obtemos:
+In the particular case considered, with components $x_j = q_1$ and $x_j = p_1$, we obtain
 \begin{align*}
-	Lq_1                        & = p_1, \\
-	\mathbb{P}Lq_1              & = p_1, \\
-	\mathbb{Q}Lq_1              & = 0,   \\
-	L\mathbb{Q}Lq_1             & = 0,   \\
-	\mathbb{P}L \mathbb{Q}L q_1 & = 0,   
+	Lq_1                         & = p_1, \\
+	\mathcal{P}Lq_1              & = p_1, \\
+	\mathcal{Q}Lq_1              & = 0,   \\
+	L\mathcal{Q}Lq_1             & = 0,   \\
+	\mathcal{P}L\mathcal{Q}L q_1 & = 0,   
 \end{align*}
-e
+and
 \begin{align*}
-	Lp_1 &= -q_1(1 + q_2^2),\\
-	\mathbb{P}Lp_1 &= -q_1\left(1 + \frac{1}{1 + q_1^2}\right),\\
-	\mathbb{Q}Lp_1 &= -q_1(1 + q_2^2) + q_1\left(1 + \frac{1}{1 + q_1^2}\right),\\
-	L\mathbb{Q}Lp_1 &= p_1\left(- (1 + q_2^2) + \left(1 + \frac{1}{1 + q_1^2} \right) \right) - \frac{2q_1^2}{(1 + q_1^2)^2} - 2q_1 q_2 p_2, \\
-	\mathbb{P}L\mathbb{Q}Lp_1 & = -\frac{2q_1^2 p_1}{(1 + q_1^2)^2}.
+	Lp_1                        & = -q_1(1 + q_2^2),                                                                                                      \\
+	\mathcal{P}Lp_1             & = -q_1\left(1 + \frac{1}{1 + q_1^2}\right),                                                                             \\
+	\mathcal{Q}Lp_1             & = -q_1(1 + q_2^2) + q_1\left(1 + \frac{1}{1 + q_1^2}\right),                                                            \\
+	L\mathcal{Q}Lp_1            & = p_1\left(- (1 + q_2^2) + \left(1 + \frac{1}{1 + q_1^2} \right) \right) - \frac{2q_1^2}{(1 + q_1^2)^2} - 2q_1 q_2 p_2, \\
+	\mathcal{P}L\mathcal{Q}Lp_1 & = -\frac{2q_1^2 p_1}{(1 + q_1^2)^2}.                                                                                    
 \end{align*}
 
-Assim, as equações aproximadas de movimento para $q_1$ e $p_1$ tornam-se:
+Thus, the approximate equations of motion for $q_1$ and $p_1$ become
 \begin{align}
-	\frac{d}{dt} q_1 & = p_1, \nonumber \\
-	\frac{d}{dt} p_1 & = -q_1\left(1 + \frac{1}{1 + q_1^2}\right) - 2t\frac{q_1^2 p_1}{(1 + q_1^2)^2} + e^{tL} \mathbb{Q}L \mathbb{Q}L p_1. \label{eq:mori-zwanzig-sistema-hamiltoniano}
+	\frac{d}{dt} q_1 & = p_1, \nonumber                                                                                                     \\
+	\frac{d}{dt} p_1 & = -q_1\left(1 + \frac{1}{1 + q_1^2}\right) - 2t\frac{q_1^2 p_1}{(1 + q_1^2)^2} + e^{tL}\mathcal{Q}L\mathcal{Q}L p_1. 
+	\label{eq:mz-hamiltonian-system}
 \end{align}
 
-Suponha agora que desejamos conhecer apenas as quantidades:
+Now suppose we are interested only in the quantities
 \begin{equation*}
 	\mathbb{E}[q_1(t) \mid q_1(0), p_1(0)], \quad \mathbb{E}[p_1(t) \mid q_1(0), p_1(0)],
 \end{equation*}
-ou seja, as esperanças condicionais de $q_1(t)$ e $p_1(t)$ dado $q_1(0), p_1(0)$. 
+that is, the conditional expectations of $q_1(t)$ and $p_1(t)$ given $q_1(0), p_1(0)$.
 
-Uma equação para essas quantidades pode ser obtida aplicando o operador $\mathbb{P}$ às equações \eqref{eq:mori-zwanzig-sistema-hamiltoniano}, lembrando que, por definição, $\mathbb{P}q_1(t) = \mathbb{E}[q_1(t) \mid q_1(0), p_1(0)]$, e de forma análoga para $p_1(t)$. Nesse processo, o termo de ruído desaparece.
+An equation for these quantities can be obtained by applying the operator $\mathcal{P}$ to equations \eqref{eq:mz-hamiltonian-system}, recalling that, by definition, $\mathcal{P}q_1(t) = \mathbb{E}[q_1(t) \mid q_1(0), p_1(0)]$, and similarly for $p_1(t)$. In this process, the noise term disappears.
 
-Contudo, surge um problema: a média de uma função de uma variável, em geral, não é igual à função da média. Para contornar essa dificuldade, uma simplificação adicional é necessária. Essa complicação pode ser evitada ao considerar trajetórias específicas das variáveis resolvidas, onde tal distinção se torna irrelevante, permitindo aplicar diretamente as equações aproximadas sem as dificuldades associadas às dinâmicas ortogonais.
+However, a problem arises: the mean of a function of a variable is not, in general, equal to the function of the mean. To overcome this difficulty, further simplification is necessary. This complication can be avoided by considering specific trajectories of the resolved variables, where such a distinction becomes irrelevant, allowing the approximate equations to be applied directly without the difficulties associated with orthogonal dynamics.
 
-\subsection{Segunda aproximação}
 
-Assuma que, para as funções no lado direito das equações \eqref{eq:mori-zwanzig-sistema-hamiltoniano}, a operação de média e a avaliação da função comutam. Isso significa que, por exemplo,
+\subsection{Second approximation}
+
+Assume that, for the functions on the right-hand side of equations \eqref{eq:mz-hamiltonian-system}, the averaging operation and the evaluation of the function commute. This means that, for example,
 \begin{equation*}
-    \mathbb{E}[(1 + q_1^2(t))^{-1} \mid q_1(0), p_1(0)] \approx \left(1 + \mathbb{E}[q_1(t) \mid \cdot]^2\right)^{-1}.
+	\mathbb{E}\!\left[(1 + q_1^2(t))^{-1} \mid q_1(0), p_1(0)\right] 
+	\approx \left(1 + \mathbb{E}[q_1(t) \mid q_1(0), p_1(0)]^2\right)^{-1}.
 \end{equation*}
 
-Essa aproximação de campo médio é válida quando o ruído é suficientemente pequeno. No caso limite em que o ruído é nulo, a aproximação torna-se exata. No problema específico considerado, essa hipótese deve ser razoável caso os dados iniciais sejam amostrados de uma densidade canônica com temperatura baixa. Aqui, utilizamos uma temperatura inicial \(T = 1\).
+This mean-field approximation is valid when the noise is sufficiently small. In the limiting case where the noise vanishes, the approximation becomes exact. In the specific problem considered, this assumption is reasonable if the initial data are sampled from a canonical distribution at low temperature. Here, we use an initial temperature $T = 1$.
 
-Com isso, definimos:
+We then define
 \begin{equation*}
-    Q_1(t) = \mathbb{E}[q_1(t) \mid q_1(0), p_1(0)], \quad P_1(t) = \mathbb{E}[p_1(t) \mid q_1(0), p_1(0)].
+	Q_1(t) = \mathbb{E}[q_1(t) \mid q_1(0), p_1(0)], 
+	\quad 
+	P_1(t) = \mathbb{E}[p_1(t) \mid q_1(0), p_1(0)].
 \end{equation*}
 
-As equações aproximadas de movimento passam a ser:
+The approximate equations of motion become
 \begin{align*}
-    \frac{d}{dt} Q_1 &= P_1,\\
-    \frac{d}{dt} P_1 &= -Q_1\left(1 + \frac{1}{1 + Q_1^2} \right) - t \cdot \frac{2 Q_1^2 P_1}{(1 + Q_1^2)^2}.
+	\frac{d}{dt} Q_1 & = P_1,                                     \\
+	\frac{d}{dt} P_1 & = -Q_1\left(1 + \frac{1}{1 + Q_1^2}\right) 
+	- t \cdot \frac{2 Q_1^2 P_1}{(1 + Q_1^2)^2}.
 \end{align*}
 
-A equação acima é resolvível numericamente e, a partir dela, temos a aproximação de Mori-Zwanzig para o nosso problema de interesse.
+The system above can be solved numerically, yielding the Mori–Zwanzig approximation for our problem of interest.
 \newpage
 \nocite{*}
 \printbibliography
 \end{document}
-    

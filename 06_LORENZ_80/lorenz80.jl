@@ -4,6 +4,8 @@ using DifferentialEquations, ModelingToolkit, CSV, DataFrames
 @variables x[1:3](t) y[1:3](t) z[1:3](t)
 D = Differential(t)
 
+# in review
+
 a = [1.0, 1.0, 3.0]
 b = [0.5 * (a[1] - a[2] - a[3]), 0.5 * (a[2] - a[3] - a[1]), 0.5 * (a[3] - a[1] - a[2])]
 c = sqrt(3/4)

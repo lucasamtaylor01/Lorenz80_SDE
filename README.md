@@ -8,7 +8,7 @@ This repository aims to organize all files and materials related to the developm
 ## ⚙️ Installation
 1. Clone the repository:
 ```bash
-git clone https://github.com/lucasamtaylor01/Lorenz80_SDE.git
+https://github.com/lucasamtaylor01/Lorenz80_SDE.git
 ```
 2. Install the necessary dependencies (if any).
 3. Run the main program or open the relevant files as needed.

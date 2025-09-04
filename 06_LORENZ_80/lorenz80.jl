@@ -4,7 +4,7 @@ using DifferentialEquations, ModelingToolkit, CSV, DataFrames
 @variables x[1:3](t) y[1:3](t) z[1:3](t)
 D = Differential(t)
 
-# in review
+
 
 a = [1.0, 1.0, 3.0]
 b = [0.5 * (a[1] - a[2] - a[3]), 0.5 * (a[2] - a[3] - a[1]), 0.5 * (a[3] - a[1] - a[2])]
@@ -45,7 +45,7 @@ x0, y0, z0 = [0.1, 0.0, 0.0], [0.1, 0.0, 0.0], [0.1, 0.0, 0.0]
 u0 = vcat(x0, y0, z0)
 tspan = (0.0, 8*1.0)
 
-sol = solve(ODEProblem(sys, u0, tspan), Tsit5(); abstol=1e-6, reltol=1e-8, saveat=0.01)
+sol = solve(ODEProblem(sys, u0, tspan), Tsit5(); abstol=1e-6, reltol=1e-8, saveat=0.01) # in review
 
 U = Array(sol)
 df = DataFrame(time = sol.t, x1 = U[1,:], x2 = U[2,:], x3 = U[3,:], y1 = U[4,:], y2 = U[5,:], y3 = U[6,:], z1 = U[7,:], z2 = U[8,:], z3 = U[9,:])

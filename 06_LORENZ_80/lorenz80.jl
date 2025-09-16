@@ -40,8 +40,8 @@ append!(eqs, [
 @mtkbuild sys = ODESystem(eqs, t)
 
 dias = 400
-"""
-HARDLEY
+
+# HARDLEY
 y0 = (f[1]/a[1])*nu_0*(1 + a[1]*g_0 + nu_0^2*a[1]^2)
 z0 = (1 + nu_0^2*a[1]^2) * y0
 x0 = -nu_0 * a[1] * y0
@@ -50,9 +50,9 @@ u0 = [x0, 0.0, 0.0,
       y0, 0.0, 0.0,
       z0, 0.0, 0.0]
 """
-
 x0, y0, z0 = [0.1, 0.0, 0.0], [0.1, 0.0, 0.0], [0.1, 0.0, 0.0]
 u0 = vcat(x0, y0, z0)
+"""
 tspan = (0.0, 8*dias)
 sol = solve(ODEProblem(sys, u0, tspan), Tsit5(); abstol=1e-6, reltol=1e-8, saveat=0.01)
 
@@ -64,5 +64,5 @@ df = DataFrame(time = sol.t,
 
 cd(@__DIR__)
 isdir("data") || mkdir("data")
-CSV.write("data/solucao_400.csv", df)
+CSV.write("data/solucao_400_hardley.csv", df)
 println("Arquivo criado com sucesso")

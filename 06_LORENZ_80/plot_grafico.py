@@ -8,57 +8,28 @@ DATADIR = BASE / "data"
 OUTDIR = BASE / "src"
 OUTDIR.mkdir(parents=True, exist_ok=True)
 
-# Ler os dados
-df_deterministico = pd.read_csv(DATADIR / "deterministico.csv")
-df_estocastico = pd.read_csv(DATADIR / "estocastico.csv")
+# Ler o CSV
+df = pd.read_csv(DATADIR / "solucao_01a.csv")
 
 # Extrair colunas
-t = df_deterministico.iloc[:, 0]
-x_deterministico = df_deterministico.iloc[:, 2]
-x_estocastico = df_estocastico.iloc[:, 1]
+t = df["time"] / 8  
+x1 = df["x1"]
+y1 = df["y1"]
+z1 = df["z1"]
 
-# --- Plot determinístico ---
-plt.figure(figsize=(12, 9), dpi=300)
-plt.plot(t, x_deterministico, linewidth=2, color="green", label="x")
-plt.title("Determinístico", fontsize=22)
-plt.xlabel("t", fontsize=18)
-plt.ylabel("x", fontsize=18)
-plt.legend(fontsize=16)
-plt.grid(True, alpha=0.5)
-plt.tight_layout()
-plt.savefig(OUTDIR / "deterministico_plot.png", dpi=300)
-plt.close()
+# Plotar evolução temporal
+plt.figure(figsize=(12, 8), dpi=300)
+#plt.plot(t, x1, label="x₁", linewidth=2, color="green")
+plt.plot(t, y1, label="y₁", linewidth=2, color="blue")
+plt.plot(t, z1, label="z₁", linewidth=2, color="red")
 
-# --- Plot estocástico ---
-plt.figure(figsize=(12, 9), dpi=300)
-plt.plot(t, x_estocastico, linewidth=2, color="blue", label="x")
-plt.title("Estocástico", fontsize=22)
-plt.xlabel("t", fontsize=18)
-plt.ylabel("x", fontsize=18)
-plt.legend(fontsize=16)
-plt.grid(True, alpha=0.5)
-plt.tight_layout()
-plt.savefig(OUTDIR / "estocastico_plot.png", dpi=300)
-plt.close()
+plt.ylim(-0.4, 0.6)
+plt.xlabel("t (dias)", fontsize=16)
+plt.ylabel("Valores", fontsize=16)
+plt.title("Evolução temporal de $x_1$, $y_1$ e $z_1$", fontsize=18)
+plt.legend(fontsize=14)
+plt.grid(True, linestyle="--", alpha=0.6)
 
-# --- Histograma determinístico ---
-plt.figure(figsize=(12, 9), dpi=300)
-plt.hist(x_deterministico, bins=100, color="green", alpha=0.7, edgecolor="black")
-plt.title("Histograma Determinístico", fontsize=22)
-plt.xlabel("x", fontsize=18)
-plt.ylabel("Frequência", fontsize=18)
-plt.grid(True, alpha=0.5)
-plt.tight_layout()
-plt.savefig(OUTDIR / "hist_deterministico.png", dpi=300)
-plt.close()
-
-# --- Histograma estocástico ---
-plt.figure(figsize=(12, 9), dpi=300)
-plt.hist(x_estocastico, bins=100, color="blue", alpha=0.7, edgecolor="black")
-plt.title("Histograma Estocástico", fontsize=22)
-plt.xlabel("x", fontsize=18)
-plt.ylabel("Frequência", fontsize=18)
-plt.grid(True, alpha=0.5)
-plt.tight_layout()
-plt.savefig(OUTDIR / "hist_estocastico.png", dpi=300)
-plt.close()
+# Caminho de saída
+OUTPNG = OUTDIR / "x1y1z1_01d.png"
+plt.savefig(OUTPNG, bbox_inches="tight")
